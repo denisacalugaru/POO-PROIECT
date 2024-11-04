@@ -1,136 +1,208 @@
 #include <iostream>
-#include <array>
-#include <chrono>
-#include <thread>
+#include <string>
+#include <utility>
+#include <vector>
+#include <algorithm>
 
-#include <SFML/Graphics.hpp>
+class Ingredient {
+private:
+  std::string nume;
+  std::string tip;
 
-#include <Helper.h>
-
-//////////////////////////////////////////////////////////////////////
-/// NOTE: this include is needed for environment-specific fixes     //
-/// You can remove this include and the call from main              //
-/// if you have tested on all environments, and it works without it //
-#include "env_fixes.h"                                              //
-//////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////
-/// This class is used to test that the memory leak checks work as expected even when using a GUI
-class SomeClass {
 public:
-    explicit SomeClass(int) {}
+  Ingredient(std::string  nume,  std::string  tip ): nume(std::move(nume)), tip(std::move(tip)){}
+
+  [[nodiscard]] std::string getNume()const{return nume;}
+  [[nodiscard]] std::string getTip()const{return tip;}
+
+  void setNume(const std::string& numeNou){nume=numeNou;}
+  void setTip(const std::string& tipNou){tip=tipNou;}
+
+  friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingr) {
+    os << ingr.nume << " " << "(" <<ingr.tip << ")";
+    return os;
+  }
+  ~Ingredient()= default;
 };
 
-SomeClass *getC() {
-    return new SomeClass{2};
-}
-//////////////////////////////////////////////////////////////////////
 
+class Preparat {
+private:
+  std::string nume;
+  float pret;
+  float gramaj;
+  std::vector<Ingredient> ingrediente;
 
+public:
+
+  Preparat(std::string  nume, float pret, float gramaj, const std
+    ::vector<Ingredient>& ingrediente)
+  :nume(std::move(nume)), pret(pret),gramaj(gramaj), ingrediente(ingrediente){}
+
+  Preparat(const Preparat& prep)
+  : nume(prep.nume), pret(prep.pret),gramaj(prep.gramaj), ingrediente(prep.ingrediente) {}
+
+  Preparat& operator=(const Preparat& prep) {
+    if (this != &prep) {
+      nume = prep.nume;
+      pret = prep.pret;
+      gramaj = prep.gramaj;
+      ingrediente = prep.ingrediente;
+    }
+    return *this;
+  }
+
+  bool esteVegetarian() const {
+    for (const auto& ingr : ingrediente) {
+      if (ingr.getTip() == "carne" || ingr.getTip() == "peste") {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  std::string getNume()const{return nume;}
+  [[nodiscard]] float getPret()const{return pret;}
+  std::vector<Ingredient> getIngrediente()const{return ingrediente;}
+
+  void setNume(const std::string& numeNou){nume=numeNou;}
+  void setPret(float pretNou){pret=pretNou;}
+  void setIngrediente(const std::vector<Ingredient>& ingredienteNoi){ingrediente=ingredienteNoi;}
+
+  friend std::ostream& operator<<(std::ostream& os, const Preparat& prep) {
+    os<< "Preparat: " << prep.nume << " -Pret: " << prep.pret << "  RON\n";
+    os<< "Ingrediente: \n";
+    for (const auto& ingr:prep.ingrediente) {
+      os << "  -" << ingr << "\n";
+    }
+    return os;
+  }
+  ~Preparat(){}
+
+};
+
+  class Categorie {
+  private:
+    std::string nume;
+    std::vector<Preparat> preparate;
+
+  public:
+    //constructor de initializare
+    Categorie(const std::string& nume, const std::vector<Preparat>& preparate):nume(nume),preparate(preparate){}
+
+    // Funcție de ordonare alfabetic
+    void ordoneazaPreparateAlfabetic() {
+      std::sort(preparate.begin(), preparate.end(), [](const Preparat& a, const Preparat& b) {
+        return a.getNume() < b.getNume();
+      });
+    }
+    std::string getNume()const{return nume;}
+    std::vector<Preparat> getPreparate()const{return preparate;}
+
+    void setNume(const std::string& numeNou){nume=numeNou;}
+    void setPreparate(const std::vector<Preparat>& preparateNoi){preparate=preparateNoi;}
+
+    friend std::ostream& operator<<(std::ostream& os, const Categorie& cat) {
+      os<<"Categorie: "<<cat.nume<< "\n";
+      for(const auto& prep:cat.preparate) {
+        os << prep << "\n";
+      }
+      return os;
+    }
+    ~Categorie(){}
+  };
+
+    class Meniu {
+      private:
+      std::vector<Categorie> categorii;
+      public:
+
+      Meniu(const std::vector<Categorie>& cat):categorii(cat){}
+
+      void ordoneazaCategorii() {
+        for (auto& categorie : categorii) {
+          categorie.ordoneazaPreparateAlfabetic();
+        }
+      }
+
+      static double calcularePretTotal(const std::vector<Preparat>& preparateComandate) {
+        double total = 0.0;
+        for (const auto& preparat : preparateComandate) {
+          total += preparat.getPret();
+        }
+        return total;
+      }
+
+      std::vector<Categorie> getCategorii()const{return categorii;}
+
+      void setCategorii(const std::vector<Categorie>& cat){categorii=cat;}
+
+      friend std::ostream& operator<<(std::ostream& os, const Meniu& men) {
+        os << "Meniu:\n";
+        for(const auto& categorie : men.categorii) {
+          os << categorie << "\n";
+        }
+        return os;
+      }
+      ~Meniu(){}
+    };
 int main() {
-    ////////////////////////////////////////////////////////////////////////
-    /// NOTE: this function call is needed for environment-specific fixes //
-    init_threads();                                                       //
-    ////////////////////////////////////////////////////////////////////////
-    ///
-    std::cout << "Hello, world!\n";
-    std::array<int, 100> v{};
-    int nr;
-    std::cout << "Introduceți nr: ";
-    /////////////////////////////////////////////////////////////////////////
-    /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
-    /// dați exemple de date de intrare folosind fișierul tastatura.txt
-    /// Trebuie să aveți în fișierul tastatura.txt suficiente date de intrare
-    /// (în formatul impus de voi) astfel încât execuția programului să se încheie.
-    /// De asemenea, trebuie să adăugați în acest fișier date de intrare
-    /// pentru cât mai multe ramuri de execuție.
-    /// Dorim să facem acest lucru pentru a automatiza testarea codului, fără să
-    /// mai pierdem timp de fiecare dată să introducem de la zero aceleași date de intrare.
-    ///
-    /// Pe GitHub Actions (bife), fișierul tastatura.txt este folosit
-    /// pentru a simula date introduse de la tastatură.
-    /// Bifele verifică dacă programul are erori de compilare, erori de memorie și memory leaks.
-    ///
-    /// Dacă nu puneți în tastatura.txt suficiente date de intrare, îmi rezerv dreptul să vă
-    /// testez codul cu ce date de intrare am chef și să nu pun notă dacă găsesc vreun bug.
-    /// Impun această cerință ca să învățați să faceți un demo și să arătați părțile din
-    /// program care merg (și să le evitați pe cele care nu merg).
-    ///
-    /////////////////////////////////////////////////////////////////////////
-    std::cin >> nr;
-    /////////////////////////////////////////////////////////////////////////
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "v[" << i << "] = ";
-        std::cin >> v[i];
-    }
-    std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
-    for(int i = 0; i < nr; ++i) {
-        std::cout << "- " << v[i] << "\n";
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    /// Pentru date citite din fișier, NU folosiți tastatura.txt. Creați-vă voi
-    /// alt fișier propriu cu ce alt nume doriți.
-    /// Exemplu:
-    /// std::ifstream fis("date.txt");
-    /// for(int i = 0; i < nr2; ++i)
-    ///     fis >> v2[i];
-    ///
-    ///////////////////////////////////////////////////////////////////////////
-    ///                Exemplu de utilizare cod generat                     ///
-    ///////////////////////////////////////////////////////////////////////////
-    Helper helper;
-    helper.help();
-    ///////////////////////////////////////////////////////////////////////////
 
-    SomeClass *c = getC();
-    std::cout << c << "\n";
-    delete c;
+  Ingredient ingr1("Rosii", "legumae");
+  Ingredient ingr2("Mozzarella", "lactate");
+  Ingredient ingr3("Busuioc", "condiment");
+  Ingredient ingr4("Pui", "carne");
+  Ingredient ingr5("Sos de rosii", "sos");
+  Ingredient ingr6("Ciocolata", "dulciuri");
+  Ingredient ingr7("Faina","cereale");
+  Ingredient ingr8("Oua","aliment");
+  Ingredient ingr9("Lapte", "lactate");
+  Ingredient ingr10("Vita", "carne");
+  Ingredient ingr11("Ulei", "cereale");
+  Ingredient ingr12("Branza Cheddar", "lactate");
+  Ingredient ingr13("Branza de vaci", "lactate");
+  Ingredient ingr14("Dulceata de visine","dulciuri");
+  Ingredient ingr15("Cafeina", "plante");
+  Ingredient ingr16("Frunze tei", "plante");
+  Ingredient ingr17("Apa", "lichide");
 
-    sf::RenderWindow window;
-    ///////////////////////////////////////////////////////////////////////////
-    /// NOTE: sync with env variable APP_WINDOW from .github/workflows/cmake.yml:31
-    window.create(sf::VideoMode({800, 700}), "My Window", sf::Style::Default);
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    /// NOTE: mandatory use one of vsync or FPS limit (not both)            ///
-    /// This is needed so we do not burn the GPU                            ///
-    window.setVerticalSyncEnabled(true);                                    ///
-    /// window.setFramerateLimit(60);                                       ///
-    ///////////////////////////////////////////////////////////////////////////
 
-    while(window.isOpen()) {
-        bool shouldExit = false;
-        sf::Event e{};
-        while(window.pollEvent(e)) {
-            switch(e.type) {
-            case sf::Event::Closed:
-                window.close();
-                break;
-            case sf::Event::Resized:
-                std::cout << "New width: " << window.getSize().x << '\n'
-                          << "New height: " << window.getSize().y << '\n';
-                break;
-            case sf::Event::KeyPressed:
-                std::cout << "Received key " << (e.key.code == sf::Keyboard::X ? "X" : "(other)") << "\n";
-                if(e.key.code == sf::Keyboard::Escape)
-                    shouldExit = true;
-                break;
-            default:
-                break;
-            }
-        }
-        if(shouldExit) {
-            window.close();
-            break;
-        }
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(300ms);
+  //lista preparate
+  Preparat prep1("Salata", 15.5, 250, {ingr1, ingr2, ingr3, ingr11});
+  Preparat prep2("Pizza cu pui", 25.0,350, {ingr1, ingr2, ingr4, ingr5, ingr7, ingr11});
+  Preparat prep3("Pizza Margherita", 20, 250,{ingr1, ingr2, ingr3, ingr7, ingr11});
+  Preparat prep4("Clatite cu ciocolata", 18, 300, {ingr6, ingr7, ingr8, ingr9,ingr11});
+  Preparat prep5("Burger vita", 22, 400, {ingr7, ingr1, ingr2, ingr3, ingr11, ingr12});
+  Preparat prep6("Bruschete",12, 200, {ingr1, ingr2, ingr3,ingr11});
+  Preparat prep7("Papanasi", 20, 300, {ingr14, ingr13, ingr11, ingr9, ingr8, ingr7});
+  Preparat prep8("Cafea", 10, 100,{ingr15});
+  Preparat prep9("Ceai", 8, 100, {ingr16, ingr17});
 
-        window.clear();
-        window.display();
-    }
-    return 0;
+  //lisra categorii de preparate
+  Categorie aperitive("Aperitive", {prep1, prep6});
+  Categorie feluriPrincipale("Feluri Principale", {prep2, prep3,prep5});
+  Categorie desert("Desert", {prep4, prep7});
+  Categorie bautura("Bautura", {prep8, prep9});
+
+  Meniu meniu({aperitive, feluriPrincipale, desert, bautura});
+
+  meniu.ordoneazaCategorii();
+
+  std::cout << meniu;
+
+  std::cout << "\nVerificare preparate vegetariene:\n";
+  std::cout << prep1.getNume() << " este vegetarian: " << (prep1.esteVegetarian() ? "Da" : "Nu") << "\n";
+  std::cout << prep2.getNume() << " este vegetarian: " << (prep2.esteVegetarian() ? "Da" : "Nu") << "\n\n";
+
+  std::vector<Preparat> preparateComandate = {prep2, prep3};
+  double total = meniu.calcularePretTotal(preparateComandate);
+  std::cout << "Pretul total al preparatelor comandate: " << total << " RON\n";
+
+  return 0;
 }
+
+
+
+
+
+
