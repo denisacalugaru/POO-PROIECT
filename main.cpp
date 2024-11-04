@@ -59,10 +59,9 @@ public:
     return true;
   }
 
-  [[nodiscard]] std::string getNume()const{return nume;}
+  [[nodiscard]] const std::string getNume()const{return nume;}
   [[nodiscard]] float getPret()const{return pret;}
 
-  void setNume(const std::string& numeNou){nume=numeNou;}
   friend std::ostream& operator<<(std::ostream& os, const Preparat& prep) {
     os<< "Preparat: " << prep.nume << " -Pret: " << prep.pret << "  RON\n";
     os<< "Ingrediente: \n";
