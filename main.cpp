@@ -59,7 +59,7 @@ public:
     return true;
   }
 
-  [[nodiscard]] const std::string getNume()const{return nume;}
+  [[nodiscard]] const std::string& getNume()const{return nume;}
   [[nodiscard]] float getPret()const{return pret;}
 
   friend std::ostream& operator<<(std::ostream& os, const Preparat& prep) {
