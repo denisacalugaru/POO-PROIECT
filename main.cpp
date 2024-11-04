@@ -12,8 +12,8 @@ private:
 public:
   Ingredient(std::string  nume,  std::string  tip ): nume(std::move(nume)), tip(std::move(tip)){}
 
-  [[nodiscard]]const std::string getNume()const{return nume;}
-  [[nodiscard]]const std::string getTip()const{return tip;}
+  [[nodiscard]]const std::string& getNume()const{return nume;}
+  [[nodiscard]]const std::string& getTip()const{return tip;}
 
 
   friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingr) {
