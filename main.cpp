@@ -63,12 +63,8 @@ public:
 
   [[nodiscard]] std::string getNume()const{return nume;}
   [[nodiscard]] float getPret()const{return pret;}
-  [[nodiscard]] std::vector<Ingredient> getIngrediente()const{return ingrediente;}
 
   void setNume(const std::string& numeNou){nume=numeNou;}
-  void setPret(float pretNou){pret=pretNou;}
-  void setIngrediente(const std::vector<Ingredient>& ingredienteNoi){ingrediente=ingredienteNoi;}
-
   friend std::ostream& operator<<(std::ostream& os, const Preparat& prep) {
     os<< "Preparat: " << prep.nume << " -Pret: " << prep.pret << "  RON\n";
     os<< "Ingrediente: \n";
@@ -97,10 +93,8 @@ public:
       });
     }
     [[nodiscard]] std::string getNume()const{return nume;}
-    [[nodiscard]] std::vector<Preparat> getPreparate()const{return preparate;}
 
     void setNume(const std::string& numeNou){nume=numeNou;}
-    void setPreparate(const std::vector<Preparat>& preparateNoi){preparate=preparateNoi;}
 
     friend std::ostream& operator<<(std::ostream& os, const Categorie& cat) {
       os<<"Categorie: "<<cat.nume<< "\n";
@@ -132,10 +126,6 @@ public:
         }
         return total;
       }
-
-      [[nodiscard]] std::vector<Categorie> getCategorii()const{return categorii;}
-
-      void setCategorii(const std::vector<Categorie>& cat){categorii=cat;}
 
       friend std::ostream& operator<<(std::ostream& os, const Meniu& men) {
         os << "Meniu:\n";
