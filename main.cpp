@@ -92,8 +92,6 @@ public:
     }
     [[nodiscard]] std::string getNume()const{return nume;}
 
-    void setNume(const std::string& numeNou){nume=numeNou;}
-
     friend std::ostream& operator<<(std::ostream& os, const Categorie& cat) {
       os<<"Categorie: "<<cat.nume<< "\n";
       for(const auto& prep:cat.preparate) {
