@@ -12,11 +12,9 @@ private:
 public:
   Ingredient(std::string  nume,  std::string  tip ): nume(std::move(nume)), tip(std::move(tip)){}
 
-  [[nodiscard]] std::string getNume()const{return nume;}
-  [[nodiscard]] std::string getTip()const{return tip;}
+  [[nodiscard]]const std::string getNume()const{return nume;}
+  [[nodiscard]]const std::string getTip()const{return tip;}
 
-  void setNume(const std::string& numeNou){nume=numeNou;}
-  void setTip(const std::string& tipNou){tip=tipNou;}
 
   friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingr) {
     os << ingr.nume << " " << "(" <<ingr.tip << ")";
@@ -138,7 +136,7 @@ public:
     };
 int main() {
 
-  Ingredient ingr1("Rosii", "legumae");
+  Ingredient ingr1("Rosii", "legumee");
   Ingredient ingr2("Mozzarella", "lactate");
   Ingredient ingr3("Busuioc", "condiment");
   Ingredient ingr4("Pui", "carne");
