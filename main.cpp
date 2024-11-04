@@ -52,7 +52,7 @@ public:
     return *this;
   }
 
-  bool esteVegetarian() const {
+  [[nodiscard]] bool esteVegetarian() const {
     for (const auto& ingr : ingrediente) {
       if (ingr.getTip() == "carne" || ingr.getTip() == "peste") {
         return false;
@@ -61,9 +61,9 @@ public:
     return true;
   }
 
-  std::string getNume()const{return nume;}
+  [[nodiscard]] std::string getNume()const{return nume;}
   [[nodiscard]] float getPret()const{return pret;}
-  std::vector<Ingredient> getIngrediente()const{return ingrediente;}
+  [[nodiscard]] std::vector<Ingredient> getIngrediente()const{return ingrediente;}
 
   void setNume(const std::string& numeNou){nume=numeNou;}
   void setPret(float pretNou){pret=pretNou;}
@@ -77,7 +77,7 @@ public:
     }
     return os;
   }
-  ~Preparat(){}
+  ~Preparat()= default;
 
 };
 
@@ -88,16 +88,16 @@ public:
 
   public:
     //constructor de initializare
-    Categorie(const std::string& nume, const std::vector<Preparat>& preparate):nume(nume),preparate(preparate){}
+    Categorie(std::string  nume, const std::vector<Preparat>& preparate):nume(std::move(nume)),preparate(preparate){}
 
     // Funcție de ordonare alfabetic
     void ordoneazaPreparateAlfabetic() {
-      std::sort(preparate.begin(), preparate.end(), [](const Preparat& a, const Preparat& b) {
+      std::ranges::sort(preparate, [](const Preparat& a, const Preparat& b) {
         return a.getNume() < b.getNume();
       });
     }
-    std::string getNume()const{return nume;}
-    std::vector<Preparat> getPreparate()const{return preparate;}
+    [[nodiscard]] std::string getNume()const{return nume;}
+    [[nodiscard]] std::vector<Preparat> getPreparate()const{return preparate;}
 
     void setNume(const std::string& numeNou){nume=numeNou;}
     void setPreparate(const std::vector<Preparat>& preparateNoi){preparate=preparateNoi;}
@@ -109,7 +109,7 @@ public:
       }
       return os;
     }
-    ~Categorie(){}
+    ~Categorie()= default;
   };
 
     class Meniu {
@@ -117,7 +117,7 @@ public:
       std::vector<Categorie> categorii;
       public:
 
-      Meniu(const std::vector<Categorie>& cat):categorii(cat){}
+      explicit Meniu(const std::vector<Categorie>& cat):categorii(cat){}
 
       void ordoneazaCategorii() {
         for (auto& categorie : categorii) {
@@ -133,7 +133,7 @@ public:
         return total;
       }
 
-      std::vector<Categorie> getCategorii()const{return categorii;}
+      [[nodiscard]] std::vector<Categorie> getCategorii()const{return categorii;}
 
       void setCategorii(const std::vector<Categorie>& cat){categorii=cat;}
 
@@ -144,7 +144,7 @@ public:
         }
         return os;
       }
-      ~Meniu(){}
+      ~Meniu()= default;
     };
 int main() {
 
@@ -195,7 +195,7 @@ int main() {
   std::cout << prep2.getNume() << " este vegetarian: " << (prep2.esteVegetarian() ? "Da" : "Nu") << "\n\n";
 
   std::vector<Preparat> preparateComandate = {prep2, prep3};
-  double total = meniu.calcularePretTotal(preparateComandate);
+  double total = Meniu::calcularePretTotal(preparateComandate);
   std::cout << "Pretul total al preparatelor comandate: " << total << " RON\n";
 
   return 0;
