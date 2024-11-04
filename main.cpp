@@ -81,7 +81,7 @@ public:
 
   public:
     //constructor de initializare
-    Categorie(std::string  nume, const std::vector<Preparat>& preparate):nume(std::move(nume)),preparate(preparate){}
+    Categorie( const std::string& nume, const std::vector<Preparat>& preparate):nume(std::move(nume)),preparate(preparate){}
 
     // Funcție de ordonare alfabetic
     void ordoneazaPreparateAlfabetic() {
