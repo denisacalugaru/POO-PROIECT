@@ -89,7 +89,7 @@ public:
         return a.getNume() < b.getNume();
       });
     }
-    [[nodiscard]] std::string getNume()const{return nume;}
+    [[nodiscard]] const std::string getNume()const{return nume;}
 
     friend std::ostream& operator<<(std::ostream& os, const Categorie& cat) {
       os<<"Categorie: "<<cat.nume<< "\n";
