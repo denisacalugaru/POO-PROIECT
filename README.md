@@ -15,7 +15,9 @@ O cerință nu se consideră îndeplinită dacă este realizată doar ca o serie
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)
-- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați
+      Sistem de gestionare meniu restaurant
+- [ ] Scurtă descriere a temei alese, ce v-ați propus să implementați 
+      Crearea unei aplicații care permite administrarea meniului și gestionarea comenzilor dintr-un restaurant
 
 ## Tema 1
 
