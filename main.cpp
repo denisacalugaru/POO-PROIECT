@@ -61,7 +61,7 @@ class Preparat {
 private:
     std::string name;
     float price;
-    float weight;
+    [[maybe_unused]] float weight;
     std::vector<Ingredient> ingredients;
 
 public:
