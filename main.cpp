@@ -1,192 +1,274 @@
 #include <iostream>
 #include <string>
-#include <utility>
 #include <vector>
 #include <algorithm>
+#include <ranges>
 
+/**
+ * @enum FoodType
+ * @brief Enum class to represent different types of food categories.
+ */
+enum class FoodType {
+    VEGETABLE, /**< Represents vegetable food type */
+    DAIRY,     /**< Represents dairy food type */
+    MEAT,      /**< Represents meat food type */
+    SPICE,     /**< Represents spice food type */
+    SAUCE,     /**< Represents sauce food type */
+    DESSERT,   /**< Represents dessert food type */
+    CEREAL     /**< Represents cereal food type */
+};
+
+/**
+ * @class Ingredient
+ * @brief Represents an ingredient used in a dish.
+ */
 class Ingredient {
 private:
-  std::string nume;
-  std::string tip;
+    std::string name; /**< The name of the ingredient */
+    FoodType type;    /**< The type of the ingredient (e.g., meat, vegetable, etc.) */
 
 public:
-  Ingredient(std::string  nume,  std::string  tip ): nume(std::move(nume)), tip(std::move(tip)){}
+    /**
+     * @brief Constructor to create an ingredient with a name and type.
+     * @param name The name of the ingredient.
+     * @param type The type of the ingredient (FoodType).
+     */
+    Ingredient(std::string name, FoodType type) : name(std::move(name)), type(type) {}
 
-  [[nodiscard]]const std::string& getNume()const{return nume;}
-  [[nodiscard]]const std::string& getTip()const{return tip;}
+    /**
+     * @brief Get the name of the ingredient.
+     * @return A constant reference to the ingredient's name.
+     */
+    [[nodiscard]] const std::string& getName() const { return name; }
 
+    /**
+     * @brief Get the type of the ingredient.
+     * @return The type of the ingredient (FoodType).
+     */
+    [[nodiscard]] FoodType getType() const { return type; }
 
-  friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingr) {
-    os << ingr.nume << " " << "(" <<ingr.tip << ")";
-    return os;
-  }
-  ~Ingredient()= default;
+    /**
+     * @brief Overload the stream insertion operator for Ingredient.
+     * @param os The output stream.
+     * @param ingredient The ingredient to insert into the stream.
+     * @return The output stream with the ingredient inserted.
+     */
+    friend std::ostream& operator<<(std::ostream& os, const Ingredient& ingredient) {
+        os << ingredient.name;
+        return os;
+    }
+
+    ~Ingredient() = default;
 };
 
-
+/**
+ * @class Preparat
+ * @brief Represents a dish (or preparation) in the menu.
+ */
 class Preparat {
 private:
-  std::string nume;
-  float pret;
-  float gramaj;
-  std::vector<Ingredient> ingrediente;
+    std::string name; /**< The name of the dish */
+    float price;      /**< The price of the dish */
+    float weight;     /**< The weight of the dish */
+    std::vector<Ingredient> ingredients; /**< The list of ingredients used in the dish */
 
 public:
+    /**
+     * @brief Constructor to create a dish with a name, price, weight, and ingredients.
+     * @param name The name of the dish.
+     * @param price The price of the dish.
+     * @param weight The weight of the dish.
+     * @param ingredients A list of ingredients used in the dish.
+     */
+    Preparat(std::string name, float price, float weight, const std::vector<Ingredient>& ingredients)
+        : name(std::move(name)), price(price), weight(weight), ingredients(ingredients) {}
 
-  Preparat(std::string  nume, float pret, float gramaj, const std
-    ::vector<Ingredient>& ingrediente)
-  :nume(std::move(nume)), pret(pret),gramaj(gramaj), ingrediente(ingrediente){}
+    /**
+     * @brief Get the name of the dish.
+     * @return A constant reference to the name of the dish.
+     */
+    [[nodiscard]] const std::string& getName() const { return name; }
 
-  Preparat(const Preparat& prep)
-  : nume(prep.nume), pret(prep.pret),gramaj(prep.gramaj), ingrediente(prep.ingrediente) {}
+    /**
+     * @brief Get the price of the dish.
+     * @return The price of the dish.
+     */
+    [[nodiscard]] float getPrice() const { return price; }
 
-  Preparat& operator=(const Preparat& prep) {
-    if (this != &prep) {
-      nume = prep.nume;
-      pret = prep.pret;
-      gramaj = prep.gramaj;
-      ingrediente = prep.ingrediente;
-    }
-    return *this;
-  }
-
-  [[nodiscard]] bool esteVegetarian() const {
-    for (const auto& ingr : ingrediente) {
-      if (ingr.getTip() == "carne" || ingr.getTip() == "peste") {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  [[nodiscard]] const std::string& getNume()const{return nume;}
-  [[nodiscard]] float getPret()const{return pret;}
-
-  friend std::ostream& operator<<(std::ostream& os, const Preparat& prep) {
-    os<< "Preparat: " << prep.nume << " -Pret: " << prep.pret << "  RON\n";
-    os<< "Ingrediente: \n";
-    for (const auto& ingr:prep.ingrediente) {
-      os << "  -" << ingr << "\n";
-    }
-    return os;
-  }
-  ~Preparat()= default;
-
-};
-
-  class Categorie {
-  private:
-    std::string nume;
-    std::vector<Preparat> preparate;
-
-  public:
-    //constructor de initializare
-    Categorie( const std::string& nume, const std::vector<Preparat>& preparate):nume(std::move(nume)),preparate(preparate){}
-
-    void ordoneazaPreparateAlfabetic() {
-      std::ranges::sort(preparate, [](const Preparat& a, const Preparat& b) {
-        return a.getNume() < b.getNume();
-      });
-    }
-    [[nodiscard]] const std::string& getNume()const{return nume;}
-
-    friend std::ostream& operator<<(std::ostream& os, const Categorie& cat) {
-      os<<"Categorie: "<<cat.nume<< "\n";
-      for(const auto& prep:cat.preparate) {
-        os << prep << "\n";
-      }
-      return os;
-    }
-    ~Categorie()= default;
-  };
-
-    class Meniu {
-      private:
-      std::vector<Categorie> categorii;
-      public:
-
-      explicit Meniu(const std::vector<Categorie>& cat):categorii(cat){}
-
-      void ordoneazaCategorii() {
-        for (auto& categorie : categorii) {
-          categorie.ordoneazaPreparateAlfabetic();
+    /**
+     * @brief Check if the dish is vegetarian.
+     * @return True if the dish is vegetarian, false otherwise.
+     */
+    bool isVegetarian() const {
+        for (const auto& ingredient : ingredients) {
+            if (ingredient.getType() == FoodType::MEAT) {
+                return false; // Dish contains meat, not vegetarian
+            }
         }
-      }
+        return true; // Dish is vegetarian
+    }
 
-      static double calcularePretTotal(const std::vector<Preparat>& preparateComandate) {
-        double total = 0.0;
-        for (const auto& preparat : preparateComandate) {
-          total += preparat.getPret();
-        }
-        return total;
-      }
-
-      friend std::ostream& operator<<(std::ostream& os, const Meniu& men) {
-        os << "Meniu:\n";
-        for(const auto& categorie : men.categorii) {
-          os << categorie << "\n";
+    /**
+     * @brief Overload the stream insertion operator for Preparat.
+     * @param os The output stream.
+     * @param dish The dish to insert into the stream.
+     * @return The output stream with the dish inserted.
+     */
+    friend std::ostream& operator<<(std::ostream& os, const Preparat& dish) {
+        os << "Dish: " << dish.name << " - Price: " << dish.price << " RON\n";
+        os << "Ingredients: \n";
+        for (const auto& ingredient : dish.ingredients) {
+            os << "  - " << ingredient << "\n";
         }
         return os;
-      }
-      ~Meniu()= default;
-    };
+    }
+
+    ~Preparat() = default;
+};
+
+/**
+ * @class Categorie
+ * @brief Represents a category of dishes in the menu (e.g., Pizza, Salads, Desserts).
+ */
+class Categorie {
+private:
+    std::string name; /**< The name of the category */
+    std::vector<Preparat> dishes; /**< The list of dishes in this category */
+
+public:
+    /**
+     * @brief Constructor to create a category with a name and a list of dishes.
+     * @param name The name of the category.
+     * @param dishes A list of dishes in the category.
+     */
+    Categorie(const std::string& name, const std::vector<Preparat>& dishes)
+        : name(name), dishes(dishes) {}
+
+    /**
+     * @brief Sort the dishes in the category alphabetically by their name.
+     */
+    void sortDishesAlphabetically() {
+        std::ranges::sort(dishes, [](const Preparat& a, const Preparat& b) {
+            return a.getName() < b.getName();
+        });
+    }
+
+    /**
+     * @brief Overload the stream insertion operator for Categorie.
+     * @param os The output stream.
+     * @param category The category to insert into the stream.
+     * @return The output stream with the category inserted.
+     */
+    friend std::ostream& operator<<(std::ostream& os, const Categorie& category) {
+        os << "Category: " << category.name << "\n";
+        for (const auto& dish : category.dishes) {
+            os << dish << "\n";
+        }
+        return os;
+    }
+
+    ~Categorie() = default;
+};
+
+/**
+ * @class Meniu
+ * @brief Represents the entire menu, consisting of multiple categories.
+ */
+class Meniu {
+private:
+    std::vector<Categorie> categories; /**< The list of categories in the menu */
+
+public:
+    /**
+     * @brief Constructor to create a menu with a list of categories.
+     * @param categories A list of categories in the menu.
+     */
+    Meniu(const std::vector<Categorie>& categories) : categories(categories) {}
+
+    /**
+     * @brief Sort all categories and their dishes alphabetically.
+     */
+    void sortCategories() {
+        for (auto& category : categories) {
+            category.sortDishesAlphabetically();
+        }
+    }
+
+    /**
+     * @brief Calculate the total price of the ordered dishes.
+     * @param orderedDishes A list of dishes that have been ordered.
+     * @return The total price of the ordered dishes.
+     */
+    static float calculateTotalPrice(const std::vector<Preparat>& orderedDishes) {
+        float total = 0.0;
+        for (const auto& dish : orderedDishes) {
+            total += dish.getPrice();
+        }
+        return total;
+    }
+
+    /**
+     * @brief Overload the stream insertion operator for Meniu.
+     * @param os The output stream.
+     * @param menu The menu to insert into the stream.
+     * @return The output stream with the menu inserted.
+     */
+    friend std::ostream& operator<<(std::ostream& os, const Meniu& menu) {
+        os << "Menu:\n";
+        for (const auto& category : menu.categories) {
+            os << category << "\n";
+        }
+        return os;
+    }
+
+    ~Meniu() = default;
+};
+
+/**
+ * @brief The main function where the program begins execution.
+ * Creates ingredients, dishes, categories, and a menu. Then it sorts, checks for vegetarian status,
+ * calculates the total price, and prints the results.
+ */
 int main() {
+    // Initialize ingredients
+    Ingredient ingr1("Tomatoes", FoodType::VEGETABLE);
+    Ingredient ingr2("Mozzarella", FoodType::DAIRY);
+    Ingredient ingr3("Basil", FoodType::SPICE);
+    Ingredient ingr4("Chicken", FoodType::MEAT);
+    Ingredient ingr5("Tomato sauce", FoodType::SAUCE);
+    Ingredient ingr6("Chocolate", FoodType::DESSERT);
+    Ingredient ingr7("Flour", FoodType::CEREAL);
 
-  Ingredient ingr1("Rosii", "legumee");
-  Ingredient ingr2("Mozzarella", "lactate");
-  Ingredient ingr3("Busuioc", "condiment");
-  Ingredient ingr4("Pui", "carne");
-  Ingredient ingr5("Sos de rosii", "sos");
-  Ingredient ingr6("Ciocolata", "dulciuri");
-  Ingredient ingr7("Faina","cereale");
-  Ingredient ingr8("Oua","aliment");
-  Ingredient ingr9("Lapte", "lactate");
-  Ingredient ingr10("Vita", "carne");
-  Ingredient ingr11("Ulei", "cereale");
-  Ingredient ingr12("Branza Cheddar", "lactate");
-  Ingredient ingr13("Branza de vaci", "lactate");
-  Ingredient ingr14("Dulceata de visine","dulciuri");
-  Ingredient ingr15("Cafeina", "plante");
-  Ingredient ingr16("Frunze tei", "plante");
-  Ingredient ingr17("Apa", "lichide");
+    // Create dishes (Preparat)
+    Preparat dish1("Margherita Pizza", 20.0, 250, { ingr1, ingr2, ingr3, ingr5 });
+    Preparat dish2("Chicken Caesar Salad", 18.0, 200, { ingr4, ingr1, ingr5 });
+    Preparat dish3("Chocolate Cake", 15.0, 150, { ingr6, ingr7 });
 
+    // Create categories (Categorie)
+    Categorie category1("Pizza", { dish1 });
+    Categorie category2("Salads", { dish2 });
+    Categorie category3("Desserts", { dish3 });
 
-  //lista preparate
-  Preparat prep1("Salata", 15.5, 250, {ingr1, ingr2, ingr3, ingr11});
-  Preparat prep2("Pizza cu pui", 25.0,350, {ingr1, ingr2, ingr4, ingr5, ingr7, ingr11});
-  Preparat prep3("Pizza Margherita", 20, 250,{ingr1, ingr2, ingr3, ingr7, ingr11});
-  Preparat prep4("Clatite cu ciocolata", 18, 300, {ingr6, ingr7, ingr8, ingr9,ingr11});
-  Preparat prep5("Burger vita", 22, 400, {ingr7, ingr1, ingr2, ingr3, ingr11, ingr12});
-  Preparat prep6("Bruschete",12, 200, {ingr1, ingr2, ingr3,ingr11});
-  Preparat prep7("Papanasi", 20, 300, {ingr14, ingr13, ingr11, ingr9, ingr8, ingr7});
-  Preparat prep8("Cafea", 10, 100,{ingr15});
-  Preparat prep9("Ceai", 8, 100, {ingr16, ingr17});
+    // Create the menu (Meniu)
+    Meniu menu({ category1, category2, category3 });
 
-  //lisra categorii de preparate
-  Categorie aperitive("Aperitive", {prep1, prep6});
-  Categorie feluriPrincipale("Feluri Principale", {prep2, prep3,prep5});
-  Categorie desert("Desert", {prep4, prep7});
-  Categorie bautura("Bautura", {prep8, prep9});
+    // Print original menu
+    std::cout << "Original Menu:\n";
+    std::cout << menu << std::endl;
 
-  Meniu meniu({aperitive, feluriPrincipale, desert, bautura});
+    // Sort categories and dishes
+    menu.sortCategories();
+    std::cout << "\nSorted Menu:\n";
+    std::cout << menu << std::endl;
 
-  meniu.ordoneazaCategorii();
+    // Check if a dish is vegetarian
+    std::cout << "\nIs " << dish1.getName() << " vegetarian? " << (dish1.isVegetarian() ? "Yes" : "No") << std::endl;
+    std::cout << "Is " << dish2.getName() << " vegetarian? " << (dish2.isVegetarian() ? "Yes" : "No") << std::endl;
 
-  std::cout << meniu;
+    // Calculate the total price of the ordered dishes
+    std::vector<Preparat> orderedDishes = { dish1, dish3 };
+    float totalPrice = Meniu::calculateTotalPrice(orderedDishes);
+    std::cout << "\nTotal Price for ordered dishes: " << totalPrice << " RON" << std::endl;
 
-  std::cout << "\nVerificare preparate vegetariene:\n";
-  std::cout << prep1.getNume() << " este vegetarian: " << (prep1.esteVegetarian() ? "Da" : "Nu") << "\n";
-  std::cout << prep2.getNume() << " este vegetarian: " << (prep2.esteVegetarian() ? "Da" : "Nu") << "\n\n";
-
-  std::vector<Preparat> preparateComandate = {prep2, prep3};
-  double total = Meniu::calcularePretTotal(preparateComandate);
-  std::cout << "Pretul total al preparatelor comandate: " << total << " RON\n";
-
-  return 0;
+    return 0;
 }
-
-
-
-
-
-
