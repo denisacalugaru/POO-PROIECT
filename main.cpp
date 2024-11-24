@@ -168,7 +168,7 @@ public:
      * @brief Constructor to create a menu with a list of categories.
      * @param categories A list of categories in the menu.
      */
-    Meniu(const std::vector<Categorie> &categories) : categories(categories) {
+   explicit Meniu(const std::vector<Categorie> &categories) : categories(categories) {
     }
 
     /**
