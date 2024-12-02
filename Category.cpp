@@ -18,7 +18,7 @@ void Category::sortDishesAlphabetically() {
 // This could be overridden by derived classes to provide more specific logic
 // @param timeOfDay The time in "HH:MM" format to check for availability
 // @return Always returns true in the current implementation
-bool Category::isAvailableAt(const std::string& timeOfDay) const {
+bool Category::isAvailableAt([[maybe_unused]]const std::string& timeOfDay) const {
     // Currently, it is a placeholder that always returns true.
     // In a more complex system, this function would check if the category is available at the given time.
     return true;
