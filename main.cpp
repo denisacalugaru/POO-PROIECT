@@ -1,255 +1,153 @@
+/**
+ * @file main.cpp
+ * @brief This file contains the main function that demonstrates how the restaurant menu system works.
+ * It includes functionality for displaying menus, calculating the total price of orders, checking vegetarian status,
+ * verifying menu availability at a specific time, and handling exceptions.
+ */
+
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <ranges>
-
-/**
- * @enum FoodType
- * @brief Enum class to represent different types of food categories.
- */
-enum class FoodType {
-    VEGETABLE,
-    DAIRY,
-    MEAT,
-    SPICE,
-    SAUCE,
-    DESSERT,
-    CEREAL
-};
-
-/**
- * @class Ingredient
- * @brief Represents an ingredient used in a dish.
- */
-class Ingredient {
-private:
-    std::string name;
-    FoodType type;
-
-public:
-    /**
-     * @brief Constructor to create an ingredient with a name and type.
-     * @param name The name of the ingredient.
-     * @param type The type of the ingredient (FoodType).
-     */
-    Ingredient(std::string name, FoodType type) : name(std::move(name)), type(type) {
-    }
-
-    [[nodiscard]] const std::string &getName() const { return name; }
-    [[nodiscard]] FoodType getType() const { return type; }
-
-    /**
-     * @brief Overload the stream insertion operator for Ingredient.
-     * @param os The output stream.
-     * @param ingredient The ingredient to insert into the stream.
-     * @return The output stream with the ingredient inserted.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Ingredient &ingredient) {
-        os << ingredient.name;
-        return os;
-    }
-
-    ~Ingredient() = default;
-};
-
-/**
- * @class Dish
- * @brief Represents a dish in the menu.
- */
-class Dish {
-private:
-    std::string name;
-    float price;
-    [[maybe_unused]] float weight;
-    std::vector<Ingredient> ingredients;
-
-public:
-    /**
-     * @brief Constructor to create a dish with a name, price, weight, and ingredients.
-     * @param name The name of the dish.
-     * @param price The price of the dish.
-     * @param weight The weight of the dish.
-     * @param ingredients A list of ingredients used in the dish.
-     */
-    Dish(std::string name, float price, float weight, const std::vector<Ingredient> &ingredients)
-        : name(std::move(name)), price(price), weight(weight), ingredients(ingredients) {
-    }
-
-    [[nodiscard]] const std::string &getName() const { return name; }
-    [[nodiscard]] float getPrice() const { return price; }
-
-    /**
-     * @brief Check if the dish is vegetarian.
-     * @return True if the dish is vegetarian, false otherwise.
-     */
-    bool isVegetarian() const {
-        for (const auto &ingredient: ingredients) {
-            if (ingredient.getType() == FoodType::MEAT) {
-                return false; // Dish contains meat, not vegetarian
-            }
-        }
-        return true; // Dish is vegetarian
-    }
-
-    /**
-     * @brief Overload the stream insertion operator for Dish.
-     * @param os The output stream.
-     * @param dish The dish to insert into the stream.
-     * @return The output stream with the dish inserted.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Dish &dish) {
-        os << "Dish: " << dish.name << " - Price: " << dish.price << " RON\n";
-        os << "Ingredients: \n";
-        for (const auto &ingredient: dish.ingredients) {
-            os << "  - " << ingredient << "\n";
-        }
-        return os;
-    }
-
-    ~Dish() = default;
-};
-
-/**
- * @class Category
- * @brief Represents a category of dishes in the menu (e.g., Pizza, Salads, Desserts).
- */
-class Category {
-private:
-    std::string name;
-    std::vector<Dish> dishes;
-
-public:
-    /**
-     * @brief Constructor to create a category with a name and a list of dishes.
-     * @param name The name of the category.
-     * @param dishes A list of dishes in the category.
-     */
-    Category(const std::string &name, const std::vector<Dish> &dishes)
-        : name(name), dishes(dishes) {
-    }
-
-    /**
-     * @brief Sort the dishes in the category alphabetically by their name.
-     */
-    void sortDishesAlphabetically() {
-        std::ranges::sort(dishes, [](const Dish &a, const Dish &b) {
-            return a.getName() < b.getName();
-        });
-    }
-
-    /**
-     * @brief Overload the stream insertion operator for Category.
-     * @param os The output stream.
-     * @param category The category to insert into the stream.
-     * @return The output stream with the category inserted.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Category &category) {
-        os << "Category: " << category.name << "\n";
-        for (const auto &dish: category.dishes) {
-            os << dish << "\n";
-        }
-        return os;
-    }
-
-    ~Category() = default;
-};
-
-/**
- * @class Menu
- * @brief Represents the entire menu, consisting of multiple categories.
- */
-class Menu {
-private:
-    std::vector<Category> categories;
-
-public:
-    /**
-     * @brief Constructor to create a menu with a list of categories.
-     * @param categories A list of categories in the menu.
-     */
-    explicit Menu(const std::vector<Category> &categories) : categories(categories) {
-    }
-
-    /**
-     * @brief Sort all categories and their dishes alphabetically.
-     */
-    void sortCategories() {
-        for (auto &category: categories) {
-            category.sortDishesAlphabetically();
-        }
-    }
-
-    /**
-     * @brief Calculate the total price of the ordered dishes.
-     * @param orderedDishes A list of dishes that have been ordered.
-     * @return The total price of the ordered dishes.
-     */
-    static float calculateTotalPrice(const std::vector<Dish> &orderedDishes) {
-        float total = 0.0;
-        for (const auto &dish: orderedDishes) {
-            total += dish.getPrice();
-        }
-        return total;
-    }
-
-    /**
-     * @brief Overload the stream insertion operator for Menu.
-     * @param os The output stream.
-     * @param menu The menu to insert into the stream.
-     * @return The output stream with the menu inserted.
-     */
-    friend std::ostream &operator<<(std::ostream &os, const Menu &menu) {
-        os << "Menu:\n";
-        for (const auto &category: menu.categories) {
-            os << category << "\n";
-        }
-        return os;
-    }
-
-    ~Menu() = default;
-};
+#include "Ingredient.h"
+#include "Dish.h"
+#include "Category.h"
+#include "Breakfast.h"
+#include "Lunch.h"
+#include "Dinner.h"
+#include "InvalidTimeException.h"
+#include "EmptyMenuException.h"
+#include "InvalidDishException.h"
 
 int main() {
     // Initialize ingredients
-    Ingredient ingr1("Tomatoes", FoodType::VEGETABLE);
-    Ingredient ingr2("Mozzarella", FoodType::DAIRY);
-    Ingredient ingr3("Basil", FoodType::SPICE);
-    Ingredient ingr4("Chicken", FoodType::MEAT);
-    Ingredient ingr5("Tomato sauce", FoodType::SAUCE);
-    Ingredient ingr6("Chocolate", FoodType::DESSERT);
-    Ingredient ingr7("Flour", FoodType::CEREAL);
+    Ingredient ingr1("Tomatoes", FoodType::VEGETABLE);  ///< Ingredient: Tomatoes, type: Vegetable
+    Ingredient ingr2("Mozzarella", FoodType::DAIRY);     ///< Ingredient: Mozzarella, type: Dairy
+    Ingredient ingr3("Basil", FoodType::SPICE);          ///< Ingredient: Basil, type: Spice
+    Ingredient ingr4("Chicken", FoodType::MEAT);         ///< Ingredient: Chicken, type: Meat
+    Ingredient ingr5("Tomato sauce", FoodType::SAUCE);   ///< Ingredient: Tomato sauce, type: Sauce
+    Ingredient ingr6("Chocolate", FoodType::DESSERT);    ///< Ingredient: Chocolate, type: Dessert
+    Ingredient ingr7("Flour", FoodType::CEREAL);         ///< Ingredient: Flour, type: Cereal
 
-    // Create dishes (Dish)
-    Dish dish1("Margherita Pizza", 20.0, 250, {ingr1, ingr2, ingr3, ingr5});
-    Dish dish2("Chicken Caesar Salad", 18.0, 200, {ingr4, ingr1, ingr5});
-    Dish dish3("Chocolate Cake", 15.0, 150, {ingr6, ingr7});
+    // Create dishes with ingredients
+    Dish dish1("Margherita Pizza", 20.0, 250, {ingr1, ingr2, ingr3, ingr5});  ///< Dish: Margherita Pizza
+    Dish dish2("Chicken Caesar Salad", 18.0, 200, {ingr4, ingr1, ingr5});     ///< Dish: Chicken Caesar Salad
+    Dish dish3("Chocolate Cake", 15.0, 150, {ingr6, ingr7});                 ///< Dish: Chocolate Cake
+    Dish dish4("Pancakes", 12.0, 100, {ingr7, ingr6});                       ///< Dish: Pancakes
+    Dish dish5("Scrambled Eggs", 10.0, 150, {ingr2});                        ///< Dish: Scrambled Eggs
+    Dish dish6("Grilled Salmon", 30.0, 300, {ingr4});                        ///< Dish: Grilled Salmon
 
-    // Create categories (Category)
-    Category category1("Pizza", {dish1});
-    Category category2("Salads", {dish2});
-    Category category3("Desserts", {dish3});
+    // Create categories for the dishes
+    Category breakfastCategory("Breakfast", {dish4, dish5});  ///< Category: Breakfast, dishes: Pancakes, Scrambled Eggs
+    Category lunchCategory("Lunch", {dish1, dish2});           ///< Category: Lunch, dishes: Margherita Pizza, Chicken Caesar Salad
+    Category dinnerCategory("Dinner", {dish6});                ///< Category: Dinner, dish: Grilled Salmon
+    Category dessertCategory("Desserts", {dish3});             ///< Category: Desserts, dish: Chocolate Cake
 
-    // Create the menu (Menu)
-    Menu menu({category1, category2, category3});
+    // Create menu objects (Breakfast, Lunch, Dinner)
+    Breakfast breakfast({breakfastCategory});              ///< Breakfast menu created
+    Lunch lunch({lunchCategory, dessertCategory});          ///< Lunch menu created with a dessert category
+    Dinner dinner({dinnerCategory});                        ///< Dinner menu created
 
-    // Print original menu
-    std::cout << "Original Menu:\n";
-    std::cout << menu << std::endl;
+    // Store menus in a vector of base class pointers (polymorphism in action)
+    std::vector<Menu*> menus;
+    menus.push_back(&breakfast);    ///< Add breakfast menu
+    menus.push_back(&lunch);        ///< Add lunch menu
+    menus.push_back(&dinner);       ///< Add dinner menu
 
-    // Sort categories and dishes
-    menu.sortCategories();
-    std::cout << "\nSorted Menu:\n";
-    std::cout << menu << std::endl;
+    // Display all menus
+    std::cout << "---------- Menus ----------\n";
+    for (const auto& menu : menus) {
+        menu->print();  ///< Call the virtual print() method to display the menu
+        std::cout << "\n";
+    }
 
-    // Check if a dish is vegetarian
-    std::cout << "\nIs " << dish1.getName() << " vegetarian? " << (dish1.isVegetarian() ? "Yes" : "No") << std::endl;
-    std::cout << "Is " << dish2.getName() << " vegetarian? " << (dish2.isVegetarian() ? "Yes" : "No") << std::endl;
+    // Example of calculating the total price for ordered dishes
+    std::vector<Dish> orderedDishes = {dish1, dish3};  ///< Example of ordered dishes: Margherita Pizza, Chocolate Cake
+    float totalPrice = Menu::calculateTotalPrice(orderedDishes);  ///< Calculate the total price
+    std::cout << "Total price for ordered dishes: " << totalPrice << " RON\n";
 
-    // Calculate the total price of the ordered dishes
-    std::vector<Dish> orderedDishes = {dish1, dish3};
-    float totalPrice = Menu::calculateTotalPrice(orderedDishes);
-    std::cout << "\nTotal Price for ordered dishes: " << totalPrice << " RON" << std::endl;
+    // Check if each menu is vegetarian
+    std::cout << "---------- Vegetarian Check ----------\n";
+    bool allVegetarian = true;
+    for (const auto& dish : breakfastCategory.getDishes()) {
+        if (!dish.isVegetarian()) {
+            allVegetarian = false;
+            break;
+        }
+    }
+    std::cout << "Is the breakfast menu vegetarian? " << (allVegetarian ? "Yes" : "No") << "\n";
 
-    return 0;
+    allVegetarian = true;
+    for (const auto& dish : lunchCategory.getDishes()) {
+        if (!dish.isVegetarian()) {
+            allVegetarian = false;
+            break;
+        }
+    }
+    std::cout << "Is the lunch menu vegetarian? " << (allVegetarian ? "Yes" : "No") << "\n\n";
+
+    // Check menu availability at a specific time (e.g., 14:00 for lunch)
+    std::string time = "14:00";  ///< Example time: 14:00 (lunch time)
+    std::cout << "---------- Availability Check at " << time << " ----------\n";
+
+    if (breakfast.isAvailableAt(time)) {
+        std::cout << "Breakfast menu is available at " << time << ".\n";
+    } else {
+        std::cout << "Breakfast menu is not available at " << time << ".\n";
+    }
+
+    if (lunch.isAvailableAt(time)) {
+        std::cout << "Lunch menu is available at " << time << ".\n";
+    } else {
+        std::cout << "Lunch menu is not available at " << time << ".\n";
+    }
+
+    if (dinner.isAvailableAt(time)) {
+        std::cout << "Dinner menu is available at " << time << ".\n";
+    } else {
+        std::cout << "Dinner menu is not available at " << time << ".\n";
+    }
+
+    // ----------------------------------------
+    // Display availability using dynamic_cast
+    // ----------------------------------------
+    std::cout << "\n---------- Availability Check using dynamic_cast at 14:00 ----------\n";
+
+    // Iterate through the menus and use dynamic_cast to determine the specific menu type
+    for (const auto& menu : menus) {
+        if (auto breakfastMenu = dynamic_cast<Breakfast*>(menu)) {
+            std::cout << "Breakfast Menu is available at 14:00: ";
+            std::cout << (breakfastMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
+        } else if (auto lunchMenu = dynamic_cast<Lunch*>(menu)) {
+            std::cout << "Lunch Menu is available at 14:00: ";
+            std::cout << (lunchMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
+        } else if (auto dinnerMenu = dynamic_cast<Dinner*>(menu)) {
+            std::cout << "Dinner Menu is available at 14:00: ";
+            std::cout << (dinnerMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
+        }
+    }
+
+    // ----------------------------------------
+    // Handle exceptions with try-catch blocks
+    // ----------------------------------------
+    try {
+        // Simulate an invalid time exception
+        throw InvalidTimeException("The specified time for the menu is invalid.");
+    } catch (const MenuException& e) {
+        std::cout << "An error occurred: " << e.what() << std::endl;  ///< Print the error message
+    }
+
+    try {
+        // Simulate an empty menu exception
+        throw EmptyMenuException("The menu is empty.");
+    } catch (const MenuException& e) {
+        std::cout << "An error occurred: " << e.what() << std::endl;  ///< Print the error message
+    }
+
+    try {
+        // Simulate an invalid dish exception
+        throw InvalidDishException("The specified dish does not exist.");
+    } catch (const MenuException& e) {
+        std::cout << "An error occurred: " << e.what() << std::endl;  ///< Print the error message
+    }
+
+    return 0;  ///< End of the main function
 }

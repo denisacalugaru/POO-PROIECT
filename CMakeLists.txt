@@ -54,6 +54,33 @@ add_executable(${PROJECT_NAME}
     main.cpp
     generated/src/Helper.cpp
     env_fixes.h
+        FoodType.h
+        Ingredient.h
+        Ingredient.cpp
+        Dish.h
+        Dish.cpp
+        Category.h
+        Category.cpp
+        Menu.h
+        Menu.cpp
+        main.cpp
+        Breakfast.h
+        Breakfast.cpp
+        Lunch.h
+        Lunch.cpp
+        Dinner.h
+        Dinner.cpp
+        FoodType.cpp
+        MenuManager.cpp
+        MenuManager.h
+        MenuException.h
+        MenuException.cpp
+        InvalidTimeException.h
+        InvalidTimeException.cpp
+        EmptyMenuException.h
+        EmptyMenuException.cpp
+        InvalidDishException.h
+        InvalidDishException.cpp
 )
 
 include(cmake/CompilerFlags.cmake)
