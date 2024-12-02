@@ -11,7 +11,7 @@ class Dish {
 private:
     std::string name;            // Name of the dish
     float price;                 // Price of the dish
-    float[[maybe_unused]] weight;                // Weight of the dish (could be useful in some menus)
+    float weight;                // Weight of the dish (could be useful in some menus)
     std::vector<Ingredient> ingredients;  // List of ingredients that make up the dish
 
 public:
