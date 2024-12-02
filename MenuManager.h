@@ -22,7 +22,7 @@ public:
      *
      * @param m A pointer to a Menu object (or derived class). Defaults to nullptr.
      */
-    MenuManager(Menu* m = nullptr);
+    explicit MenuManager(Menu* m = nullptr);
 
     /**
      * @brief Copy constructor.
@@ -70,7 +70,7 @@ public:
      * This method invokes the `print()` method of the `menu` object, which is a virtual method defined in the Menu base class
      * or its derived classes.
      */
-    void displayMenu() const;
+     void displayMenu() const;
 
     /**
      * @brief Calls the `sortCategories()` method of the Menu object.

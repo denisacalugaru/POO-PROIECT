@@ -54,7 +54,7 @@ int main() {
 
     // Display all menus
     std::cout << "---------- Menus ----------\n";
-    for (const auto& menu : menus) {
+    for (const auto* menu : menus) {
         menu->print();  ///< Call the virtual print() method to display the menu
         std::cout << "\n";
     }
@@ -113,13 +113,13 @@ int main() {
 
     // Iterate through the menus and use dynamic_cast to determine the specific menu type
     for (const auto& menu : menus) {
-        if (auto breakfastMenu = dynamic_cast<Breakfast*>(menu)) {
+        if (auto* breakfastMenu = dynamic_cast<Breakfast*>(menu)) {
             std::cout << "Breakfast Menu is available at 14:00: ";
             std::cout << (breakfastMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
-        } else if (auto lunchMenu = dynamic_cast<Lunch*>(menu)) {
+        } else if (auto* lunchMenu = dynamic_cast<Lunch*>(menu)) {
             std::cout << "Lunch Menu is available at 14:00: ";
             std::cout << (lunchMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
-        } else if (auto dinnerMenu = dynamic_cast<Dinner*>(menu)) {
+        } else if (auto* dinnerMenu = dynamic_cast<Dinner*>(menu)) {
             std::cout << "Dinner Menu is available at 14:00: ";
             std::cout << (dinnerMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
         }
