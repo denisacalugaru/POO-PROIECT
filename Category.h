@@ -31,7 +31,7 @@ public:
 
     // Returns the list of dishes in the category
     // @return A vector containing all dishes in the category
-    std::vector<Dish> getDishes() const;
+    const std::vector<Dish>& getDishes() const;
 
     // Virtual destructor ensures proper cleanup in derived classes
     virtual ~Category() = default;

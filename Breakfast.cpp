@@ -3,7 +3,8 @@
 /**
  * @brief Constructor for the Breakfast menu.
  *
- * Initializes the breakfast menu with the given categories by calling the base class Menu constructor.
+ * This constructor initializes the Breakfast menu with the given categories.
+ * It calls the base class Menu constructor to set the categories.
  *
  * @param categories The list of categories for the breakfast menu.
  */
@@ -12,34 +13,34 @@ Breakfast::Breakfast(const std::vector<Category>& categories) : Menu(categories)
 /**
  * @brief Checks if the breakfast menu is available at the given time.
  *
- * Checks whether the time falls within the breakfast hours (08:00 to 10:00).
+ * This function checks if the current time is within the valid range for breakfast (08:00 - 10:00).
  *
  * @param time The time to check in "HH:MM" format.
  * @return True if the menu is available, false otherwise.
  */
 bool Breakfast::isAvailableAt(const std::string& time) const {
-    // The breakfast menu is available between 08:00 and 10:00
+    // Implementation for the breakfast menu time range
     return time >= "08:00" && time <= "10:00";
 }
 
 /**
  * @brief Returns the description of the breakfast menu.
  *
- * @return A string that represents the description of the menu.
+ * @return A string describing the menu as "Breakfast Menu".
  */
 std::string Breakfast::getDescription() const {
     return "Breakfast Menu";
 }
 
 /**
- * @brief Prints the breakfast menu categories.
+ * @brief Prints the categories of the breakfast menu.
  *
- * Prints the menu's title followed by each category in the breakfast menu.
+ * This function prints the "Breakfast Menu" title followed by the details of each category
+ * in the breakfast menu by calling the print function from the Category class.
  */
 void Breakfast::print() const {
     std::cout << "Breakfast Menu:\n";
-    // Loop through each category and print it
     for (const auto& category : categories) {
-        category.print();  // Calls the print method from the Category class to print the category's details
+        category.print();  // Calling the print method from the `Category` class
     }
 }

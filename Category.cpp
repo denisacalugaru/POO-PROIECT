@@ -35,7 +35,7 @@ void Category::print() const {
 
 // Returns the list of dishes in the category
 // @return A vector containing all the dishes in the category
-std::vector<Dish> Category::getDishes() const {
+const std::vector<Dish>& Category::getDishes() const {
     return dishes;  // Return the list of dishes
 }
 
