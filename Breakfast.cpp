@@ -28,7 +28,7 @@ bool Breakfast::isAvailableAt(const std::string& time) const {
  *
  * @return A string describing the menu as "Breakfast Menu".
  */
-std::string Breakfast::getDescription() const {
+ [[maybe_unused]]std::string Breakfast::getDescription() const {
     return "Breakfast Menu";
 }
 
