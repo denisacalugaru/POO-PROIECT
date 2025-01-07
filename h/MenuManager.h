@@ -70,7 +70,7 @@ public:
      * This method invokes the `print()` method of the `menu` object, which is a virtual method defined in the Menu base class
      * or its derived classes.
      */
-     void displayMenu() const;
+     void [[maybe_unused]]displayMenu() const;
 
     /**
      * @brief Calls the `sortCategories()` method of the Menu object.
