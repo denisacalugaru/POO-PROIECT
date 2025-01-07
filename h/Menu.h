@@ -73,9 +73,9 @@ public:
 
     virtual ~Menu() = default; /**< Virtual destructor. */
 
-    void [[maybe_unused]]checkAvailability(const std::string& time);
-    void [[maybe_unused]]checkMenuEmpty(const std::vector<std::string>& menuItems);
-    void [[maybe_unused]]checkDishValidity(const std::string& dish);
+    void checkAvailability(const std::string& time);
+    void checkMenuEmpty(const std::vector<std::string>& menuItems);
+    void checkDishValidity(const std::string& dish);
 
 protected:
     /**

@@ -35,7 +35,7 @@ protected:
      *
      * @return A string that represents the description of the menu.
      */
-    std::string [[maybe_unused]]getDescription() const override;
+    std::string getDescription() const override;
 
     /**
      * @brief Prints the details of the breakfast menu, including the categories.
