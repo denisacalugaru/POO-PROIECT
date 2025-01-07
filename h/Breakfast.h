@@ -6,6 +6,7 @@
 // The Breakfast class is a derived class of Menu
 // It represents the breakfast menu and overrides methods from the Menu class.
 class Breakfast : public Menu {
+
 public:
     /**
      * @brief Constructor for the Breakfast class.
