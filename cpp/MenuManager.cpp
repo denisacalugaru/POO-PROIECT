@@ -1,89 +1,81 @@
-#include "../h/MenuManager.h"
-#include <iostream>
-#include <algorithm>  // std::swap
+#include "../H/MenuManager.h"
+
+// Initialize the static instance to nullptr
+/**
+ * @brief Static instance of MenuManager, initialized to nullptr.
+ *
+ * Used to ensure only one instance of MenuManager exists (Singleton pattern).
+ */
+MenuManager* MenuManager::instance = nullptr;
 
 /**
- * @brief Constructor that initializes the MenuManager with a given Menu pointer.
+ * @brief Constructor for MenuManager.
  *
- * This constructor accepts a pointer to a derived Menu object and stores it in
- * the `menu` member variable. The pointer is managed by the MenuManager instance.
+ * Initializes the `menu` pointer to the provided Menu object.
  *
- * @param m A pointer to a Menu object (or derived class).
+ * @param m Pointer to a Menu object. Defaults to nullptr.
  */
 MenuManager::MenuManager(Menu* m) : menu(m) {}
 
 /**
- * @brief Move constructor for MenuManager.
+ * @brief Static method to get the Singleton instance of MenuManager.
  *
- * This constructor transfers ownership of the `menu` pointer from another
- * MenuManager instance to the new one. The original instance is left with a
- * null pointer.
+ * Ensures that only one instance of MenuManager exists. If the instance does not exist,
+ * it creates a new one. Subsequent calls will return the same instance.
  *
- * @param other The MenuManager object to move from.
+ * @param m Pointer to a Menu object. Defaults to nullptr (used only on the first call).
+ * @return MenuManager& Reference to the Singleton instance.
  */
-MenuManager::MenuManager(MenuManager&& other) noexcept : menu(other.menu) {
-    other.menu = nullptr;  // Transfer the resource and nullify the source object
-}
-
-/**
- * @brief Copy-and-swap assignment operator.
- *
- * This operator performs a copy-and-swap assignment. The current object
- * swaps its `menu` resource with the temporary `other` object, effectively
- * performing a deep copy of the `menu` pointer.
- *
- * @param other The MenuManager object to copy from.
- * @return A reference to the current MenuManager object.
- */
-MenuManager& MenuManager::operator=(MenuManager other) {
-    std::swap(menu, other.menu);  // Swap between current object and temporary
-    return *this;  // Return reference to the current object
-}
-
-/**
- * @brief Move assignment operator for MenuManager.
- *
- * This operator moves the `menu` resource from another MenuManager instance
- * to the current one, transferring ownership and nullifying the source.
- *
- * @param other The MenuManager object to move from.
- * @return A reference to the current MenuManager object.
- */
-MenuManager& MenuManager::operator=(MenuManager&& other) noexcept {
-    if (this != &other) {  // Avoid self-assignment
-        delete menu;  // Free the current resource
-        menu = other.menu;  // Transfer ownership
-        other.menu = nullptr;  // Nullify the source pointer
+MenuManager& MenuManager::getInstance(Menu* m) {
+    if (instance == nullptr) {
+        instance = new MenuManager(m);
     }
-    return *this;
+    return *instance;
 }
 
 /**
- * @brief Calls the `print()` method of the Menu object.
+ * @brief Sets a new Menu object to be managed by MenuManager.
  *
- * This method invokes the `print()` method of the `menu` object, which is
- * a virtual method defined in the Menu base class or its derived classes.
+ * Deletes the existing `menu` object (if any) and assigns the new Menu pointer.
+ *
+ * @param m Pointer to the new Menu object.
  */
-[[maybe_unused]]void MenuManager::displayMenu() const {
-    menu->print();  // Call the print function from the derived class
+void MenuManager::setMenu(Menu* m) {
+    if (menu) {
+        delete menu;  // Clean up existing menu
+    }
+    menu = m;
 }
 
 /**
- * @brief Calls the `sortCategories()` method of the Menu object.
+ * @brief Displays the menu using the `print()` method of the Menu object.
  *
- * This method invokes the `sortCategories()` method of the `menu` object,
- * which sorts the categories of the menu.
+ * This method calls the `print()` method of the `menu` object, which is defined
+ * in the Menu base class or its derived classes. If no menu is set, nothing happens.
+ */
+void MenuManager::displayMenu() const {
+    if (menu) {
+        menu->print();
+    }
+}
+
+/**
+ * @brief Sorts the menu categories using the `sortCategories()` method.
+ *
+ * This method calls the `sortCategories()` method of the `menu` object, which sorts
+ * the categories of the menu. If no menu is set, nothing happens.
  */
 void MenuManager::sortCategories() const {
-    menu->sortCategories();  // Call the sortCategories function from the base class
+    if (menu) {
+        menu->sortCategories();
+    }
 }
 
 /**
  * @brief Destructor for MenuManager.
  *
- * The destructor cleans up the resources by deleting the managed `menu` object.
- * If no menu was assigned, no deletion occurs.
+ * Deletes the managed `menu` object to free resources. If no menu is set, no action is taken.
  */
 MenuManager::~MenuManager() {
-    delete menu;  // Clean up the allocated resource
+    delete menu;
 }

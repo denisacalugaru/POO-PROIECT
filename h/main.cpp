@@ -1,10 +1,3 @@
-/**
- * @file main.cpp
- * @brief This file contains the main function that demonstrates how the restaurant menu system works.
- * It includes functionality for displaying menus, calculating the total price of orders, checking vegetarian status,
- * verifying menu availability at a specific time, and handling exceptions.
- */
-
 #include <iostream>
 #include <vector>
 #include "../h/Ingredient.h"
@@ -16,6 +9,49 @@
 #include "../h/InvalidTimeException.h"
 #include "../h/EmptyMenuException.h"
 #include "../h/InvalidDishException.h"
+#include "MenuContext.h"
+#include "BreakfastMenuDisplay.h"
+#include "LunchMenuDisplay.h"
+#include "DinnerMenuDisplay.h"
+#include "MenuManager.h"
+
+/**
+ * @brief Template function to calculate the average of numeric values in a vector.
+ *
+ * This function is designed to calculate the average of numeric values in a vector.
+ * It works with any numeric type (like int, float, or double) and returns the average
+ * as the same type.
+ *
+ * @tparam T The type of the values in the vector (numeric types such as int, float, double).
+ * @param values A vector containing the values for which the average is to be calculated.
+ * @return The average value of the numbers in the vector.
+ */
+template <typename T>
+T calculateAverage(const std::vector<T>& values) {
+    T sum = 0;
+    for (const T& value : values) {
+        sum += value;
+    }
+    return sum / values.size();
+}
+
+/**
+ * @brief Template specialization for `calculateAverage` when the type is `std::string`.
+ *
+ * This specialization is specifically for vectors of strings. Instead of calculating
+ * the numeric average, it concatenates the strings and returns the concatenated result.
+ *
+ * @param values A vector of strings to be concatenated.
+ * @return The concatenated string formed from all the strings in the vector.
+ */
+template <>
+std::string calculateAverage(const std::vector<std::string>& values) {
+    std::string result;
+    for (const auto& value : values) {
+        result += value + " ";  ///< Concatenate each string with a space.
+    }
+    return result;
+}
 
 int main() {
     // Initialize ingredients
@@ -59,6 +95,21 @@ int main() {
         std::cout << "\n";
     }
     std::cout << "Number of Dish instances: " << Dish::getInstanceCount() << "\n";
+
+    // Calculate the average price of dishes (template instantiation)
+    std::vector<float> prices = {dish1.getPrice(), dish2.getPrice(), dish3.getPrice(), dish4.getPrice(), dish5.getPrice(), dish6.getPrice()};
+    float averagePrice = calculateAverage(prices);  ///< Template instantiation for float
+    std::cout << "Average price of dishes: " << averagePrice << " RON\n";
+
+    // Another example of template instantiation with an int vector
+    std::vector<int> intPrices = {10, 20, 15, 12, 25};  ///< Example prices (in int)
+    int averageIntPrice = calculateAverage(intPrices);  ///< Template instantiation for int
+    std::cout << "Average integer price: " << averageIntPrice << "\n";
+
+    // Example of using the string specialization for the template
+    std::vector<std::string> dishNames = {"Margherita Pizza", "Chicken Caesar Salad", "Chocolate Cake"};
+    std::string concatenatedDishNames = calculateAverage(dishNames);  ///< Template specialization for std::string
+    std::cout << "Concatenated dish names: " << concatenatedDishNames << "\n";
 
     // Example of calculating the total price for ordered dishes
     std::vector<Dish> orderedDishes = {dish1, dish3};  ///< Example of ordered dishes: Margherita Pizza, Chocolate Cake
@@ -107,24 +158,31 @@ int main() {
         std::cout << "Dinner menu is not available at " << time << ".\n";
     }
 
-    // Display availability using dynamic_cast
+    // ------------ Strategy Pattern Integration ------------
 
-    std::cout << "\n---------- Availability Check using dynamic_cast at 14:00 ----------\n";
+    // Create strategy instances for Breakfast, Lunch, and Dinner
+    BreakfastMenuDisplay breakfastDisplay;
+    LunchMenuDisplay lunchDisplay;
+    DinnerMenuDisplay dinnerDisplay;
 
-    // Iterate through the menus and use dynamic_cast to determine the specific menu type
-    for (const auto& menu : menus) {
-        if (auto* const breakfastMenu = dynamic_cast<Breakfast*>(menu)) {
-            std::cout << "Breakfast Menu is available at 14:00: ";
-            std::cout << (breakfastMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
-        } else if (auto* const lunchMenu = dynamic_cast<Lunch*>(menu)) {
-            std::cout << "Lunch Menu is available at 14:00: ";
-            std::cout << (lunchMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
-        } else if (auto* const dinnerMenu = dynamic_cast<Dinner*>(menu)) {
-            std::cout << "Dinner Menu is available at 14:00: ";
-            std::cout << (dinnerMenu->isAvailableAt("14:00") ? "Yes" : "No") << std::endl;
-        }
-    }
+    // Create a MenuContext object and set the initial strategy (Breakfast)
+    MenuContext menuContext(&breakfastDisplay);
 
+    // Display the breakfast menu using the strategy
+    std::cout << "\n---------- Strategy Pattern: Breakfast Menu ----------\n";
+    menuContext.displayMenu("Breakfast");
+
+    // Change strategy to Lunch and display the lunch menu
+    menuContext.setStrategy(&lunchDisplay);
+    std::cout << "\n---------- Strategy Pattern: Lunch Menu ----------\n";
+    menuContext.displayMenu("Lunch");
+
+    // Change strategy to Dinner and display the dinner menu
+    menuContext.setStrategy(&dinnerDisplay);
+    std::cout << "\n---------- Strategy Pattern: Dinner Menu ----------\n";
+    menuContext.displayMenu("Dinner");
+
+    // ------------ End of Strategy Pattern Integration ------------
 
     // Handle exceptions with try-catch blocks
 
@@ -149,5 +207,27 @@ int main() {
         std::cout << "An error occurred: " << e.what() << std::endl;  ///< Print the error message
     }
 
-    return 0;  ///< End of the main function
+    // ------------ Singleton Pattern Integration ------------
+
+    // Get the singleton instance of MenuManager
+    MenuManager& menuManager = MenuManager::getInstance();  // Singleton instance
+
+    // Set and display Breakfast menu using Singleton
+    menuManager.setMenu(&breakfast);
+    std::cout << "\n---------- Singleton Pattern: Breakfast Menu ----------\n";
+    menuManager.displayMenu();
+
+    // Change to Lunch menu using Singleton
+    menuManager.setMenu(&lunch);
+    std::cout << "\n---------- Singleton Pattern: Lunch Menu ----------\n";
+    menuManager.displayMenu();
+
+    // Change to Dinner menu using Singleton
+    menuManager.setMenu(&dinner);
+    std::cout << "\n---------- Singleton Pattern: Dinner Menu ----------\n";
+    menuManager.displayMenu();
+
+    // ------------ End of Singleton Pattern Integration ------------
+
+    return 0;
 }
