@@ -5,64 +5,42 @@
 
 /**
  * @class MenuManager
- * @brief This class manages a Menu object, allowing operations like displaying and sorting the menu.
+ * @brief Singleton class to manage a Menu object, ensuring only one instance exists.
  *
- * The MenuManager class is designed to handle a pointer to a Menu object, which could be of any derived class.
- * It supports copy and move semantics, as well as functionality for interacting with the Menu object, such as displaying the menu and sorting its categories.
+ * The MenuManager class is responsible for managing a pointer to a Menu object, allowing operations like displaying
+ * and sorting the menu. It follows the Singleton design pattern to ensure a single instance exists throughout the program.
  */
 class MenuManager {
 private:
     Menu* menu;  ///< Pointer to the base class Menu
+    static MenuManager* instance;  ///< Static instance for the Singleton
 
-public:
     /**
-     * @brief Constructor that initializes the MenuManager with a given Menu pointer.
+     * @brief Private constructor for Singleton pattern.
      *
-     * This constructor accepts a pointer to a derived Menu object and stores it in the `menu` member variable.
+     * This ensures the class cannot be instantiated directly.
      *
-     * @param m A pointer to a Menu object (or derived class). Defaults to nullptr.
+     * @param m Optional pointer to a Menu object.
      */
     explicit MenuManager(Menu* m = nullptr);
 
+public:
     /**
-     * @brief Copy constructor.
+     * @brief Static method to access the unique instance of MenuManager.
      *
-     * This constructor creates a new MenuManager instance by copying the data from another MenuManager object.
+     * This ensures that only one instance of MenuManager exists. If the instance does not exist, it is created.
      *
-     * @param other The MenuManager object to copy from.
+     * @param m Optional pointer to initialize the menu (only applies on the first call).
+     * @return MenuManager& The single instance of MenuManager.
      */
-    MenuManager(const MenuManager& other);
+    static MenuManager& getInstance(Menu* m = nullptr);
 
     /**
-     * @brief Move constructor for MenuManager.
+     * @brief Sets a new Menu object to be managed.
      *
-     * This constructor transfers ownership of the `menu` pointer from another MenuManager instance to the new one.
-     * The original instance is left with a null pointer.
-     *
-     * @param other The MenuManager object to move from.
+     * @param m Pointer to the new Menu object.
      */
-    MenuManager(MenuManager&& other) noexcept;
-
-    /**
-     * @brief Copy assignment operator using the copy-and-swap idiom.
-     *
-     * This operator performs a safe copy assignment by swapping the current object with a temporary copy of the other object.
-     *
-     * @param other The MenuManager object to copy from.
-     * @return A reference to the current MenuManager object.
-     */
-    MenuManager& operator=(MenuManager other);
-
-    /**
-     * @brief Move assignment operator for MenuManager.
-     *
-     * This operator moves the `menu` resource from another MenuManager instance to the current one, transferring ownership
-     * and nullifying the source.
-     *
-     * @param other The MenuManager object to move from.
-     * @return A reference to the current MenuManager object.
-     */
-    MenuManager& operator=(MenuManager&& other) noexcept;
+    void setMenu(Menu* m);
 
     /**
      * @brief Calls the `print()` method of the Menu object.
@@ -70,7 +48,7 @@ public:
      * This method invokes the `print()` method of the `menu` object, which is a virtual method defined in the Menu base class
      * or its derived classes.
      */
-  [[maybe_unused]]  void displayMenu() const;
+    [[maybe_unused]] void displayMenu() const;
 
     /**
      * @brief Calls the `sortCategories()` method of the Menu object.
@@ -83,9 +61,12 @@ public:
      * @brief Destructor for MenuManager.
      *
      * The destructor cleans up the resources by deleting the managed `menu` object.
-     * If no menu was assigned, no deletion occurs.
      */
     ~MenuManager();
+
+    // Deleted copy constructor and assignment operator to enforce Singleton
+    MenuManager(const MenuManager&) = delete;
+    MenuManager& operator=(const MenuManager&) = delete;
 };
 
 #endif // MENUMANAGER_H

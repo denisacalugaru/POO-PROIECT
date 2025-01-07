@@ -79,6 +79,17 @@ add_executable(oop
         h/InvalidTimeException.h
         h/EmptyMenuException.h
         h/InvalidDishException.h
+        h/MenuDisplayStrategy.h
+        h/BreakfastMenuDisplay.h
+        h/LunchMenuDisplay.h
+        h/DinnerMenuDisplay.h
+        h/MenuContext.h
+        h/BreakfastMenuDisplay.h
+        h/DinnerMenuDisplay.h
+        h/LunchMenuDisplay.h
+        h/MenuDisplayStrategy.h
+        h/MenuContext.h
+        cpp/MenuInventory.cpp
 )
 
 
