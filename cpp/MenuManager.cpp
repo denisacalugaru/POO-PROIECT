@@ -64,7 +64,7 @@ MenuManager& MenuManager::operator=(MenuManager&& other) noexcept {
  * This method invokes the `print()` method of the `menu` object, which is
  * a virtual method defined in the Menu base class or its derived classes.
  */
-[[maybe_unused]]void MenuManager::displayMenu() const {
+/*[[maybe_unused]]void MenuManager::displayMenu() const {
     menu->print();  // Call the print function from the derived class
 }
 

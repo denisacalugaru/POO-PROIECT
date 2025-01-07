@@ -41,7 +41,7 @@ void Menu::print() const {
         category.print();
     }
 }
-[[maybe_unused]] void Menu::checkAvailability(const std::string& time) {
+/*[[maybe_unused]] void Menu::checkAvailability(const std::string& time) {
     if (time != "08:00" && time != "12:00" && time != "18:00") {
         throw InvalidTimeException("Invalid time for menu availability.");
     }
@@ -57,4 +57,4 @@ void Menu::print() const {
     if (dish != "Pizza" && dish != "Pasta" && dish != "Burger") {
         throw InvalidDishException("The specified dish does not exist.");
     }
-}
+}*/
