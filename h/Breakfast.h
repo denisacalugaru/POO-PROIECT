@@ -43,6 +43,7 @@ protected:
      * The print function loops through the categories of the breakfast menu and prints them.
      */
     void print() const override;
+
 };
 
 #endif // BREAKFAST_H
