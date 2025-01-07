@@ -25,6 +25,15 @@ bool Breakfast::isAvailableAt(const std::string& time) const {
 }
 
 /**
+ * @brief Returns the description of the breakfast menu.
+ *
+ * @return A string describing the menu as "Breakfast Menu".
+ */
+ [[maybe_unused]]std::string Breakfast::getDescription() const {
+    return "Breakfast Menu";
+}
+
+/**
  * @brief Prints the categories of the breakfast menu.
  *
  * This function prints the "Breakfast Menu" title followed by the details of each category

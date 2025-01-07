@@ -59,6 +59,16 @@ MenuManager& MenuManager::operator=(MenuManager&& other) noexcept {
 }
 
 /**
+ * @brief Calls the `print()` method of the Menu object.
+ *
+ * This method invokes the `print()` method of the `menu` object, which is
+ * a virtual method defined in the Menu base class or its derived classes.
+ */
+[[maybe_unused]]void MenuManager::displayMenu() const {
+    menu->print();  // Call the print function from the derived class
+}
+
+/**
  * @brief Calls the `sortCategories()` method of the Menu object.
  *
  * This method invokes the `sortCategories()` method of the `menu` object,
