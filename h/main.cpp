@@ -7,15 +7,15 @@
 
 #include <iostream>
 #include <vector>
-#include "Ingredient.h"
-#include "Dish.h"
-#include "Category.h"
-#include "Breakfast.h"
-#include "Lunch.h"
-#include "Dinner.h"
-#include "InvalidTimeException.h"
-#include "EmptyMenuException.h"
-#include "InvalidDishException.h"
+#include "../h/Ingredient.h"
+#include "../h/Dish.h"
+#include "../h/Category.h"
+#include "../h/Breakfast.h"
+#include "../h/Lunch.h"
+#include "../h/Dinner.h"
+#include "../h/InvalidTimeException.h"
+#include "../h/EmptyMenuException.h"
+#include "../h/InvalidDishException.h"
 
 int main() {
     // Initialize ingredients
@@ -50,7 +50,7 @@ int main() {
     std::vector<Menu*> menus;
     menus.push_back(&breakfast);    ///< Add breakfast menu
     menus.push_back(&lunch);        ///< Add lunch menu
-    menus.push_back(&dinner);       ///< Add dinner menu
+    menus.push_back(&dinner);      ///< Add dinner menu
 
     // Display all menus
     std::cout << "---------- Menus ----------\n";
@@ -58,6 +58,7 @@ int main() {
         menu->print();  ///< Call the virtual print() method to display the menu
         std::cout << "\n";
     }
+    std::cout << "Number of Dish instances: " << Dish::getInstanceCount() << "\n";
 
     // Example of calculating the total price for ordered dishes
     std::vector<Dish> orderedDishes = {dish1, dish3};  ///< Example of ordered dishes: Margherita Pizza, Chocolate Cake
@@ -106,9 +107,8 @@ int main() {
         std::cout << "Dinner menu is not available at " << time << ".\n";
     }
 
-    // ----------------------------------------
     // Display availability using dynamic_cast
-    // ----------------------------------------
+
     std::cout << "\n---------- Availability Check using dynamic_cast at 14:00 ----------\n";
 
     // Iterate through the menus and use dynamic_cast to determine the specific menu type
@@ -125,9 +125,9 @@ int main() {
         }
     }
 
-    // ----------------------------------------
+
     // Handle exceptions with try-catch blocks
-    // ----------------------------------------
+
     try {
         // Simulate an invalid time exception
         throw InvalidTimeException("The specified time for the menu is invalid.");

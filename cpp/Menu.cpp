@@ -1,4 +1,9 @@
-#include "Menu.h"
+#include "../h/Menu.h"
+#include "../h/InvalidDishException.h"
+#include "../h/InvalidTimeException.h"
+#include "../h/EmptyMenuException.h"
+#include<stdexcept>
+
 
 Menu::Menu(const std::vector<Category>& categories) : categories(categories) {}
 
@@ -34,5 +39,22 @@ void Menu::print() const {
     // Print all categories of the menu
     for (const auto& category : categories) {
         category.print();
+    }
+}
+void Menu::checkAvailability(const std::string& time) {
+    if (time != "08:00" && time != "12:00" && time != "18:00") {
+        throw InvalidTimeException("Invalid time for menu availability.");
+    }
+}
+
+void Menu::checkMenuEmpty(const std::vector<std::string>& menuItems) {
+    if (menuItems.empty()) {
+        throw EmptyMenuException("The menu is empty.");
+    }
+}
+
+void Menu::checkDishValidity(const std::string& dish) {
+    if (dish != "Pizza" && dish != "Pasta" && dish != "Burger") {
+        throw InvalidDishException("The specified dish does not exist.");
     }
 }

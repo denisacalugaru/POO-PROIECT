@@ -6,13 +6,13 @@
 
 // Enum class for FoodType, representing different categories of food
 enum class FoodType {
-    VEGETABLE,  // Represents vegetable ingredients
-    DAIRY,      // Represents dairy ingredients
-    MEAT,       // Represents meat ingredients
-    SPICE,      // Represents spice ingredients
-    SAUCE,      // Represents sauce ingredients
-    DESSERT,    // Represents dessert ingredients
-    CEREAL      // Represents cereal ingredients
+    VEGETABLE,
+    DAIRY,
+    MEAT,
+    SPICE,
+    SAUCE,
+    DESSERT,
+    CEREAL
 };
 
 class Ingredient {

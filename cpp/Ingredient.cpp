@@ -1,4 +1,4 @@
-#include "Ingredient.h"
+#include "../h/Ingredient.h"
 
 Ingredient::Ingredient(std::string name, FoodType type)
     : name(std::move(name)), type(type) {}  // Initialize name and type using an initializer list

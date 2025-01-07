@@ -13,7 +13,7 @@ private:
     float price;                 // Price of the dish
     [[maybe_unused]]float weight;                // Weight of the dish (could be useful in some menus)
     std::vector<Ingredient> ingredients;  // List of ingredients that make up the dish
-
+    static int instanceCount;
 public:
     // Constructor to initialize a dish object
     // @param name: Name of the dish
@@ -33,7 +33,7 @@ public:
     // Checks whether the dish is vegetarian based on its ingredients
     // @return true if no meat is found in the ingredients, otherwise false
     bool isVegetarian() const;
-
+    static int getInstanceCount();
     // Overloads the stream insertion operator to print the dish's details
     // @param os: Output stream where the dish details will be inserted
     // @param dish: The dish whose details are to be printed

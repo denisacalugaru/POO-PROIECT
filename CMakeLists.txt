@@ -50,45 +50,43 @@ endif()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME}
-    main.cpp
-    generated/src/Helper.cpp
-    env_fixes.h
-        FoodType.h
-        Ingredient.h
-        Ingredient.cpp
-        Dish.h
-        Dish.cpp
-        Category.h
-        Category.cpp
-        Menu.h
-        Menu.cpp
-        main.cpp
-        Breakfast.h
-        Breakfast.cpp
-        Lunch.h
-        Lunch.cpp
-        Dinner.h
-        Dinner.cpp
-        FoodType.cpp
-        MenuManager.cpp
-        MenuManager.h
-        MenuException.h
-        MenuException.cpp
-        InvalidTimeException.h
-        InvalidTimeException.cpp
-        EmptyMenuException.h
-        EmptyMenuException.cpp
-        InvalidDishException.h
-        InvalidDishException.cpp
+add_executable(oop
+        h/main.cpp
+        cpp/generated/src/Helper.cpp
+        cpp/Category.cpp
+        cpp/Breakfast.cpp
+        cpp/Lunch.cpp
+        cpp/Dinner.cpp
+        cpp/Menu.cpp
+        cpp/MenuManager.cpp
+        cpp/Ingredient.cpp
+        cpp/InvalidDishException.cpp
+        cpp/MenuException.cpp
+        cpp/InvalidTimeException.cpp
+        cpp/Dish.cpp
+        h/FoodType.h
+        h/Ingredient.h
+        h/Dish.h
+        h/Category.h
+        h/Menu.h
+        h/Breakfast.h
+        h/Lunch.h
+        h/Dinner.h
+        h/MenuManager.h
+        h/MenuException.h
+        h/InvalidTimeException.h
+        h/EmptyMenuException.h
+        h/InvalidDishException.h
 )
+
+
 
 include(cmake/CompilerFlags.cmake)
 
 ###############################################################################
 
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE generated/include)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE cpp/generated/include)
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${SFML_SOURCE_DIR}/include)
 target_link_directories(${PROJECT_NAME} PRIVATE ${SFML_BINARY_DIR}/lib)

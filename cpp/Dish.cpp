@@ -1,12 +1,16 @@
-#include "Dish.h"
+#include "../h/Dish.h"
 
 // Constructor for the Dish class, initializing all member variables
 // @param name: The name of the dish
 // @param price: The price of the dish
 // @param weight: The weight of the dish
 // @param ingredients: A vector of Ingredient objects that the dish consists of
+
+int Dish::instanceCount=0;
 Dish::Dish(std::string name, float price, float weight, const std::vector<Ingredient>& ingredients)
-    : name(std::move(name)), price(price), weight(weight), ingredients(ingredients) {}
+    : name(std::move(name)), price(price), weight(weight), ingredients(ingredients) {
+  instanceCount++;
+    }
 
 // Returns the name of the dish
 // @return The name of the dish
@@ -31,6 +35,8 @@ bool Dish::isVegetarian() const {
     }
     return true;  // Dish is vegetarian if no meat ingredient is found
 }
+int Dish::getInstanceCount() {return instanceCount;}
+
 
 // Overloads the stream insertion operator to print a detailed representation of the dish
 // @param os: The output stream

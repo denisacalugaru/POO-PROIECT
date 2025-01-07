@@ -1,4 +1,4 @@
-#include "Lunch.h"
+#include "../h/Lunch.h"
 
 Lunch::Lunch(const std::vector<Category>& categories) : Menu(categories) {}
 

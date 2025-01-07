@@ -73,6 +73,10 @@ public:
 
     virtual ~Menu() = default; /**< Virtual destructor. */
 
+    void checkAvailability(const std::string& time);
+    void checkMenuEmpty(const std::vector<std::string>& menuItems);
+    void checkDishValidity(const std::string& dish);
+
 protected:
     /**
      * @brief Pure virtual function for returning a description of the menu.

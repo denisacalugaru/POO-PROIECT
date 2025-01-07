@@ -1,4 +1,4 @@
-#include "MenuException.h"
+#include "../h/MenuException.h"
 
 // Constructor that takes the error message and stores it
 /**

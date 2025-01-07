@@ -1,4 +1,4 @@
-#include "Dinner.h"
+#include "../h/Dinner.h"
 
 // Constructor for the Dinner class that initializes the base Menu class with categories
 // @param categories: A vector of Category objects that define the available categories in the dinner menu
