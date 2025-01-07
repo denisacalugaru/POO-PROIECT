@@ -41,19 +41,19 @@ void Menu::print() const {
         category.print();
     }
 }
-void Menu::checkAvailability(const std::string& time) {
+[[maybe_unused]]void Menu::checkAvailability(const std::string& time) {
     if (time != "08:00" && time != "12:00" && time != "18:00") {
         throw InvalidTimeException("Invalid time for menu availability.");
     }
 }
 
-void Menu::checkMenuEmpty(const std::vector<std::string>& menuItems) {
+[[maybe_unused]]void Menu::checkMenuEmpty(const std::vector<std::string>& menuItems) {
     if (menuItems.empty()) {
         throw EmptyMenuException("The menu is empty.");
     }
 }
 
-void Menu::checkDishValidity(const std::string& dish) {
+[[maybe_unused]]void Menu::checkDishValidity(const std::string& dish) {
     if (dish != "Pizza" && dish != "Pasta" && dish != "Burger") {
         throw InvalidDishException("The specified dish does not exist.");
     }
