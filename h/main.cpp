@@ -215,13 +215,7 @@ int main() {
     std::cout << "Breakfast Inventory:\n";
     breakfastInventory.displayMenus();
 
-    std::vector<float> prices_= {10.5, 20.0, 15.0};
-    float averagePric_ = calculateAverage(prices);
-    std::cout << "Average price: " << averagePrice << "\n";
 
-    std::vector<std::string> dishName_ = {"Pizza", "Burger", "Pasta"};
-    std::string concatenatedNames = calculateAverage(dishNames);
-    std::cout << "Concatenated dish names: " << concatenatedNames << "\n";
 
 
 
