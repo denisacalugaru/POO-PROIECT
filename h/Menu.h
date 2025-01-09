@@ -20,6 +20,7 @@ protected:
     std::vector<Category> categories; /**< A vector of Category objects representing the menu's sections. */
 
    public:
+
     /**
      * @brief Constructor that initializes a Menu with a list of categories.
      *
@@ -119,7 +120,6 @@ protected:
      * @return A string representing the description of the menu.
      */
     virtual std::string getDescription() const = 0;
- ~Menu() override = default;
 
 };
 
