@@ -1,4 +1,4 @@
-#include "../H/MenuManager.h"
+#include "../h/MenuManager.h"
 
 // Initialize the static instance to nullptr
 /**
