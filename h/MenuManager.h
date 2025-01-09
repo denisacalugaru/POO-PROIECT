@@ -64,7 +64,6 @@ public:
      */
     ~MenuManager();
 
-    // Deleted copy constructor and assignment operator to enforce Singleton
     MenuManager(const MenuManager&) = delete;
     MenuManager& operator=(const MenuManager&) = delete;
 };

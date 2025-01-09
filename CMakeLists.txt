@@ -64,7 +64,6 @@ add_executable(oop
         cpp/MenuException.cpp
         cpp/InvalidTimeException.cpp
         cpp/Dish.cpp
-        h/FoodType.h
 
 
         h/Ingredient.h
