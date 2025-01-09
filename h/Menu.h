@@ -85,7 +85,7 @@ protected:
      */
     friend std::ostream& operator<<(std::ostream& os, const Menu& menu);
 
-
+    virtual ~Menu() = default; /**< Virtual destructor. */
 
     /**
      * @brief Check the availability of the menu based on the time.
@@ -119,7 +119,7 @@ protected:
      * @return A string representing the description of the menu.
      */
     virtual std::string getDescription() const = 0;
-    ~Menu() override = default;
+ ~Menu() override = default;
 
 };
 
