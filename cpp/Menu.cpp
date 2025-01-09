@@ -73,5 +73,6 @@ void Menu::removeCategory(const std::string& categoryName) {
         categories.erase(it, categories.end());
         notify("Category removed: " + categoryName); // Notify observers
     }
+    
 
 }

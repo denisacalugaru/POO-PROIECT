@@ -15,8 +15,17 @@
 #include "DinnerMenuDisplay.h"
 #include "MenuChangeLogger.h"
 #include "MenuInventory.h"
+#include"Menu.h"
 #include "MenuManager.h"
-
+void initializeMenu(Menu& menu) {
+    try {
+        menu.checkAvailability("10:00");         // Call through the Menu instance
+        menu.checkMenuEmpty({"Pizza", "Pasta"}); // Call through the Menu instance
+        menu.checkDishValidity("Pizza");         // Call through the Menu instance
+    } catch (const MenuException& e) {
+        std::cout << e.what() << std::endl;
+    }
+}
 
 template <typename T>
 T calculateAverage(const std::vector<T>& values) {

@@ -41,6 +41,7 @@ bool Breakfast::isAvailableAt(const std::string& time) const {
  */
 void Breakfast::print() const {
     std::cout << "Breakfast Menu:\n";
+    std::cout << getDescription() << ":\n";
     for (const auto& category : categories) {
         category.print();  // Calling the print method from the `Category` class
     }

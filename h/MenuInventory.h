@@ -36,13 +36,6 @@ public:
         }
     }
 
-    /**
-     * @brief Gets the number of menus in the inventory.
-     * @return Number of menus in the inventory.
-     */
-    size_t getMenuCount() const {
-        return menus.size();
-    }
 
 };
 
