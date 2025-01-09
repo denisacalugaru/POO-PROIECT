@@ -225,6 +225,9 @@ int main() {
     breakfastInventory.displayMenus();
 
 
+    // Call initializeMenu to check the menu
+    initializeMenu(breakfast);
+
 
 
 
