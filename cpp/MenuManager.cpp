@@ -17,35 +17,6 @@ MenuManager* MenuManager::instance = nullptr;
  */
 MenuManager::MenuManager(Menu* m) : menu(m) {}
 
-/**
- * @brief Static method to get the Singleton instance of MenuManager.
- *
- * Ensures that only one instance of MenuManager exists. If the instance does not exist,
- * it creates a new one. Subsequent calls will return the same instance.
- *
- * @param m Pointer to a Menu object. Defaults to nullptr
- * @return MenuManager& Reference to the Singleton instance.
- */
-MenuManager& MenuManager::getInstance(Menu* m) {
-    if (instance == nullptr) {
-        instance = new MenuManager(m);
-    }
-    return *instance;
-}
-
-/**
- * @brief Sets a new Menu object to be managed by MenuManager.
- *
- * Deletes the existing `menu` object (if any) and assigns the new Menu pointer.
- *
- * @param m Pointer to the new Menu object.
- */
-void MenuManager::setMenu(Menu* m) {
-    if (menu) {
-        delete menu;  // Clean up existing menu
-    }
-    menu = m;
-}
 
 /**
  * @brief Displays the menu using the `print()` method of the Menu object.

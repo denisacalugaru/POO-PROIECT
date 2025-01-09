@@ -24,14 +24,6 @@ public:
     }
 
     /**
-     * @brief Remove an observer from the list of observers.
-     * @param observer The observer to remove.
-     */
-    void detach(Observer* observer) {
-        observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
-    }
-
-    /**
      * @brief Notify all registered observers about a change.
      * @param message The notification message.
      */
