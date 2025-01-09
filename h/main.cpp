@@ -13,19 +13,11 @@
 #include "BreakfastMenuDisplay.h"
 #include "LunchMenuDisplay.h"
 #include "DinnerMenuDisplay.h"
+#include "MenuChangeLogger.h"
+#include "MenuInventory.h"
 #include "MenuManager.h"
 
-/**
- * @brief Template function to calculate the average of numeric values in a vector.
- *
- * This function is designed to calculate the average of numeric values in a vector.
- * It works with any numeric type (like int, float, or double) and returns the average
- * as the same type.
- *
- * @tparam T The type of the values in the vector (numeric types such as int, float, double).
- * @param values A vector containing the values for which the average is to be calculated.
- * @return The average value of the numbers in the vector.
- */
+
 template <typename T>
 T calculateAverage(const std::vector<T>& values) {
     T sum = 0;
@@ -35,15 +27,6 @@ T calculateAverage(const std::vector<T>& values) {
     return sum / values.size();
 }
 
-/**
- * @brief Template specialization for `calculateAverage` when the type is `std::string`.
- *
- * This specialization is specifically for vectors of strings. Instead of calculating
- * the numeric average, it concatenates the strings and returns the concatenated result.
- *
- * @param values A vector of strings to be concatenated.
- * @return The concatenated string formed from all the strings in the vector.
- */
 template <>
 std::string calculateAverage(const std::vector<std::string>& values) {
     std::string result;
@@ -206,28 +189,42 @@ int main() {
     } catch (const MenuException& e) {
         std::cout << "An error occurred: " << e.what() << std::endl;  ///< Print the error message
     }
+    // Create a logger to monitor menu activities
+    MenuChangeLogger logger;
 
-    // ------------ Singleton Pattern Integration ------------
+    // Attach the logger to the Breakfast menu
+    breakfast.attach(&logger);
 
-    // Get the singleton instance of MenuManager
-    MenuManager& menuManager = MenuManager::getInstance();  // Singleton instance
+    // Add a category to the menu
+    Category pancakesCategory("Pancakes", {});
+    breakfast.addCategory(pancakesCategory); // [MenuChangeLogger] Category added: Pancakes
 
-    // Set and display Breakfast menu using Singleton
-    menuManager.setMenu(&breakfast);
-    std::cout << "\n---------- Singleton Pattern: Breakfast Menu ----------\n";
-    menuManager.displayMenu();
+    // Remove the category from the menu
+    breakfast.removeCategory("Pancakes");    // [MenuChangeLogger] Category removed: Pancakes
 
-    // Change to Lunch menu using Singleton
-    menuManager.setMenu(&lunch);
-    std::cout << "\n---------- Singleton Pattern: Lunch Menu ----------\n";
-    menuManager.displayMenu();
+    // Create Breakfast menu inventory
+    MenuInventory<Breakfast> breakfastInventory;
 
-    // Change to Dinner menu using Singleton
-    menuManager.setMenu(&dinner);
-    std::cout << "\n---------- Singleton Pattern: Dinner Menu ----------\n";
-    menuManager.displayMenu();
+    // Add Breakfast menus
+    Breakfast breakfastMenu1({Category("Pancakes", {Dish("Pancake", 10.0, 150.0, {})})});
+    Breakfast breakfastMenu2({Category("Eggs", {Dish("Scrambled Eggs", 15.0, 200.0, {})})});
+    breakfastInventory.addMenu(breakfastMenu1);
+    breakfastInventory.addMenu(breakfastMenu2);
 
-    // ------------ End of Singleton Pattern Integration ------------
+    // Display the inventories
+    std::cout << "Breakfast Inventory:\n";
+    breakfastInventory.displayMenus();
+
+    std::vector<float> prices_= {10.5, 20.0, 15.0};
+    float averagePric_ = calculateAverage(prices);
+    std::cout << "Average price: " << averagePrice << "\n";
+
+    std::vector<std::string> dishName_ = {"Pizza", "Burger", "Pasta"};
+    std::string concatenatedNames = calculateAverage(dishNames);
+    std::cout << "Concatenated dish names: " << concatenatedNames << "\n";
+
+
+
 
     return 0;
 }

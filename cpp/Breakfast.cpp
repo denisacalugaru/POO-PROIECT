@@ -44,4 +44,5 @@ void Breakfast::print() const {
     for (const auto& category : categories) {
         category.print();  // Calling the print method from the `Category` class
     }
+
 }

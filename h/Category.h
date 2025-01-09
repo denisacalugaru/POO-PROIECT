@@ -20,6 +20,9 @@ public:
     // @param name: The name of the category (e.g., "Breakfast", "Lunch")
     // @param dishes: A list of Dish objects belonging to this category
     Category(const std::string& name, const std::vector<Dish>& dishes);
+    const std::string& getName() const {
+        return name;
+    }
 
     // Sorts the dishes in the category alphabetically by their name
     void sortDishesAlphabetically();

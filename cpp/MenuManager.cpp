@@ -23,7 +23,7 @@ MenuManager::MenuManager(Menu* m) : menu(m) {}
  * Ensures that only one instance of MenuManager exists. If the instance does not exist,
  * it creates a new one. Subsequent calls will return the same instance.
  *
- * @param m Pointer to a Menu object. Defaults to nullptr (used only on the first call).
+ * @param m Pointer to a Menu object. Defaults to nullptr
  * @return MenuManager& Reference to the Singleton instance.
  */
 MenuManager& MenuManager::getInstance(Menu* m) {

@@ -90,6 +90,12 @@ add_executable(oop
         h/MenuDisplayStrategy.h
         h/MenuContext.h
         cpp/MenuInventory.cpp
+        cpp/EmptyMenuException.cpp
+        h/Observer.h
+        h/Subject.h
+        h/MenuChangeLogger.h
+        cpp/MenuChangeLogger.cpp
+        h/MenuInventory.h
 )
 
 
