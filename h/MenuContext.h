@@ -13,7 +13,7 @@ private:
     MenuDisplayStrategy* strategy;  ///< The current display strategy
 
 public:
-    MenuContext(MenuDisplayStrategy* initialStrategy)
+   explicit MenuContext(MenuDisplayStrategy* initialStrategy)
         : strategy(initialStrategy) {}
 
     // Change the display strategy
